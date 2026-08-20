@@ -1,0 +1,23 @@
+# Dependency directories
+node_modules/
+portfolio-backend/node_modules/
+portfolio-frontend/node_modules/
+
+# Build Output
+portfolio-frontend/dist/
+
+# Local configuration & environment variables
+.env
+portfolio-backend/.env
+portfolio-frontend/.env
+
+# Virtual environment (Python)
+.venv/
+venv/
+ENV/
+
+# System / IDE files
+.DS_Store
+.vscode/
+.idea/
+*.log
