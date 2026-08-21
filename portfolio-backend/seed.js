@@ -16,6 +16,10 @@ const realJourney = [
     institution: "VNR VJIET",
     branch: "ECE - VLSI",
     description: "Started my engineering journey at VNR VJIET in ECE - VLSI and built my programming foundation by learning C, followed by Python and SQL.",
+    objective: "Build programming fundamentals and command line basics.",
+    whatIBuiltLearned: "Constructed terminal utilities, basic algorithms, and relational table schemas.",
+    technologies: ["C", "Python", "SQL"],
+    projects: ["Student Management System"],
     milestones: [
       "Started with C programming",
       "Learned Python",
@@ -33,6 +37,10 @@ const realJourney = [
     institution: "VNR VJIET",
     branch: "ECE - VLSI",
     description: "Moved from programming fundamentals into backend development, learning Flask, REST APIs, databases, and how complete applications communicate through services.",
+    objective: "Learn backend servers, routing architectures, and web standard communication.",
+    whatIBuiltLearned: "Engineered REST APIs with HTTP request validation and dynamic server layouts.",
+    technologies: ["Flask", "REST APIs", "SQL"],
+    projects: ["Student Management System"],
     milestones: [
       "Learned Flask",
       "Built REST APIs",
@@ -50,6 +58,10 @@ const realJourney = [
     institution: "VNR VJIET",
     branch: "ECE - VLSI",
     description: "Started exploring modern AI engineering beyond basic model usage, including agent building, multi-agent architectures, and RAG pipelines.",
+    objective: "Incorporate modern language model interfaces, embeddings, and cognitive routing loops.",
+    whatIBuiltLearned: "Configured automated agent executors, semantic query matches, and context bindings.",
+    technologies: ["AI", "AI Agents", "Multi-Agent Architecture", "RAG Pipelines"],
+    projects: ["SmartCampus AI", "Smart AI Robot"],
     milestones: [
       "Started building AI agents",
       "Explored multi-agent architecture",
@@ -67,6 +79,10 @@ const realJourney = [
     institution: "VNR VJIET",
     branch: "ECE - VLSI",
     description: "Applying programming, backend, AI, and engineering knowledge to increasingly ambitious projects involving automation, computer vision, robotics, and embedded systems.",
+    objective: "Integrate hardware systems, real-time computer vision logic, and custom silicon architectures.",
+    whatIBuiltLearned: "Developed physical robot controllers, serial data bridges, and HDL synthesizable cores.",
+    technologies: ["React", "Node.js", "Express", "MongoDB", "Verilog", "FPGA", "Digital Logic Design"],
+    projects: ["Gesture Control Car", "Smart AI Robot", "FPGA / Digital Logic Design", "Verilog hardware systems", "Full-Stack Portfolio"],
     milestones: [
       "Student Management System",
       "SmartCampus AI",

@@ -140,3 +140,57 @@
     display: none; /* disable racer dot on mobile */
   }
 }
+
+/* =========================================================
+   JOURNEY EXPANDED READOUT AND BADGES
+   ========================================================= */
+
+.journey-expanded-details {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 14px;
+  border-top: 1px dashed rgba(6, 182, 212, 0.15);
+  padding-top: 14px;
+}
+
+.journey-detail-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.journey-detail-text {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+  margin: 0;
+}
+
+.journey-badge-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 2px;
+}
+
+.tech-badge-hud {
+  padding: 2px 8px;
+  background: rgba(6, 182, 212, 0.05);
+  border: 1px solid rgba(6, 182, 212, 0.15);
+  color: var(--hud-cyan);
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-family: monospace;
+}
+
+.project-badge-hud {
+  padding: 2px 8px;
+  background: rgba(139, 92, 246, 0.05);
+  border: 1px solid rgba(139, 92, 246, 0.15);
+  color: #c084fc;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-family: monospace;
+}
+

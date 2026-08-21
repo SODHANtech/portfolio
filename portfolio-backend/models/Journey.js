@@ -42,6 +42,24 @@ const journeySchema = new mongoose.Schema(
       default: "ACTIVE",
       trim: true,
     },
+    objective: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+    whatIBuiltLearned: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+    technologies: {
+      type: [String],
+      default: [],
+    },
+    projects: {
+      type: [String],
+      default: [],
+    },
     milestones: {
       type: [String],
       default: [],

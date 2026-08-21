@@ -40,6 +40,48 @@ export default function JourneyCard({ item }) {
 
         <p className="journey-description">{item.description}</p>
 
+        <div className="journey-expanded-details">
+          {item.objective && (
+            <div className="journey-detail-item">
+              <span className="technical-label">OBJECTIVE:</span>
+              <p className="journey-detail-text">{item.objective}</p>
+            </div>
+          )}
+
+          {item.whatIBuiltLearned && (
+            <div className="journey-detail-item">
+              <span className="technical-label">WHAT_I_BUILT_LEARNED:</span>
+              <p className="journey-detail-text">{item.whatIBuiltLearned}</p>
+            </div>
+          )}
+
+          {item.technologies && item.technologies.length > 0 && (
+            <div className="journey-detail-item">
+              <span className="technical-label">TECHNOLOGIES_LOGGED:</span>
+              <div className="journey-badge-wrap">
+                {item.technologies.map((tech) => (
+                  <span key={tech} className="tech-badge-hud">
+                    {tech}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {item.projects && item.projects.length > 0 && (
+            <div className="journey-detail-item">
+              <span className="technical-label">RELATED_PROJECTS_INDEX:</span>
+              <div className="journey-badge-wrap">
+                {item.projects.map((proj) => (
+                  <span key={proj} className="project-badge-hud">
+                    {proj}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+
         {item.milestones && item.milestones.length > 0 && (
           <div className="journey-milestones">
             <span className="technical-label">LOGS_DECRYPTED:</span>
