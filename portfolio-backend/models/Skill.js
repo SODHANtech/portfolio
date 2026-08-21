@@ -23,6 +23,11 @@ const skillSchema = new mongoose.Schema(
       default: "",
       trim: true,
     },
+    role: {
+      type: String,
+      default: "",
+      trim: true,
+    },
     projects: {
       type: [String],
       default: [],

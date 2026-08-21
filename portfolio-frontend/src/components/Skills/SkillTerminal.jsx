@@ -46,13 +46,28 @@ export default function SkillTerminal({
                     <p className="readout-skill-desc">{skill.description}</p>
                   )}
 
+                  {skill.role && (
+                    <p className="readout-skill-role">
+                      <span className="technical-label">ROLE:</span> {skill.role}
+                    </p>
+                  )}
+
+                  {skill.experience && (
+                    <p className="readout-skill-exp">
+                      <span className="technical-label">CONTEXT:</span> {skill.experience}
+                    </p>
+                  )}
+
                   {skill.projects && skill.projects.length > 0 && (
-                    <div className="readout-skill-integrations">
-                      {skill.projects.map((project, pIdx) => (
-                        <span key={pIdx} className="integration-tag">
-                          {project}
-                        </span>
-                      ))}
+                    <div className="readout-skill-integration-block">
+                      <span className="technical-label" style={{ fontSize: "0.68rem" }}>INTEGRATIONS:</span>
+                      <div className="readout-skill-integrations" style={{ display: "inline-flex", verticalAlign: "middle", marginLeft: "8px" }}>
+                        {skill.projects.map((project, pIdx) => (
+                          <span key={pIdx} className="integration-tag">
+                            {project}
+                          </span>
+                        ))}
+                      </div>
                     </div>
                   )}
                 </div>

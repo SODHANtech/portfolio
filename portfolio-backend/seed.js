@@ -83,28 +83,156 @@ const realJourney = [
 
 const realSkills = [
   // Programming
-  { name: "C", category: "PROGRAMMING", level: "WORKING KNOWLEDGE" },
-  { name: "Python", category: "PROGRAMMING", level: "WORKING KNOWLEDGE" },
-  { name: "SQL", category: "PROGRAMMING", level: "WORKING KNOWLEDGE" },
+  {
+    name: "C",
+    category: "PROGRAMMING",
+    level: "WORKING KNOWLEDGE",
+    description: "Low-level system programming and firmware design foundation.",
+    role: "Hardware interfacing and algorithmic optimization.",
+    projects: ["FPGA / Digital Logic Design"],
+    experience: "Academic programming foundations at VNR VJIET."
+  },
+  {
+    name: "Python",
+    category: "PROGRAMMING",
+    level: "WORKING KNOWLEDGE",
+    description: "Extensive scripting, AI model integration, and automation capability.",
+    role: "AI agent orchestrations, computer vision tracking, and statistical analytics.",
+    projects: ["Smart AI Robot", "Gesture Control Car", "Student Management System", "Cricket Match Analysis"],
+    experience: "Main programming language for all AI and automation modules."
+  },
+  {
+    name: "SQL",
+    category: "PROGRAMMING",
+    level: "WORKING KNOWLEDGE",
+    description: "Relational database querying and management.",
+    role: "Designing tabular schemas and writing complex query modules.",
+    projects: ["Student Management System", "SmartCampus AI"],
+    experience: "Core relational query development."
+  },
   // Backend
-  { name: "Flask", category: "BACKEND", level: "WORKING KNOWLEDGE" },
-  { name: "REST APIs", category: "BACKEND", level: "WORKING KNOWLEDGE" },
+  {
+    name: "Flask",
+    category: "BACKEND",
+    level: "WORKING KNOWLEDGE",
+    description: "Lightweight Python web routing framework.",
+    role: "Creating mock server systems and micro-APIs for local projects.",
+    projects: [],
+    experience: "Learned during Backend Development origins phase."
+  },
+  {
+    name: "REST APIs",
+    category: "BACKEND",
+    level: "WORKING KNOWLEDGE",
+    description: "Standard HTTP request routing and payload interfaces.",
+    role: "Designing endpoints, validating client requests, and parsing data models.",
+    projects: ["SmartCampus AI", "Full-Stack Portfolio"],
+    experience: "Standard interface protocol for MERN and Flask systems."
+  },
   // AI / Advanced Systems
-  { name: "AI", category: "AI & SYSTEMS", level: "CURRENTLY EXPLORING" },
-  { name: "AI Agents", category: "AI & SYSTEMS", level: "CURRENTLY EXPLORING" },
-  { name: "Multi-Agent Architecture", category: "AI & SYSTEMS", level: "CURRENTLY EXPLORING" },
-  { name: "RAG Pipelines", category: "AI & SYSTEMS", level: "CURRENTLY EXPLORING" },
+  {
+    name: "AI",
+    category: "AI & SYSTEMS",
+    level: "CURRENTLY EXPLORING",
+    description: "Advanced machine learning, LLM prompts, and computer vision models.",
+    role: "Image gesture tracking (MediaPipe) and generative assistant bots.",
+    projects: ["SmartCampus AI", "Smart AI Robot", "Gesture Control Car"],
+    experience: "Core focus area in B.Tech engineering studies."
+  },
+  {
+    name: "AI Agents",
+    category: "AI & SYSTEMS",
+    level: "CURRENTLY EXPLORING",
+    description: "Autonomous code loops executing specific toolsets.",
+    role: "LLM reasoning loop integrations and automated workflow planning.",
+    projects: ["Smart AI Robot"],
+    experience: "Exploring agent loop structures and framework behaviors."
+  },
+  {
+    name: "Multi-Agent Architecture",
+    category: "AI & SYSTEMS",
+    level: "CURRENTLY EXPLORING",
+    description: "Cooperative systems with distributed task delegation.",
+    role: "Building collaborative agent networks for complex operations.",
+    projects: ["SmartCampus AI"],
+    experience: "Studying routing and task-handshake architectures."
+  },
+  {
+    name: "RAG Pipelines",
+    category: "AI & SYSTEMS",
+    level: "CURRENTLY EXPLORING",
+    description: "Retrieval Augmented Generation models accessing private data stores.",
+    role: "Optimizing embeddings search and contextual text generation.",
+    projects: ["SmartCampus AI"],
+    experience: "Connecting local information databases with cloud models."
+  },
   // Frontend / Full Stack
-  { name: "React", category: "FRONTEND / FULL STACK", level: "WORKING KNOWLEDGE" },
-  { name: "JavaScript", category: "FRONTEND / FULL STACK", level: "WORKING KNOWLEDGE" },
+  {
+    name: "React",
+    category: "FRONTEND / FULL STACK",
+    level: "WORKING KNOWLEDGE",
+    description: "Dynamic component-based client user interface rendering.",
+    role: "Building responsive single page tactical interfaces and status dashboards.",
+    projects: ["SmartCampus AI", "Full-Stack Portfolio"],
+    experience: "Core frontend design stack."
+  },
+  {
+    name: "JavaScript",
+    category: "FRONTEND / FULL STACK",
+    level: "WORKING KNOWLEDGE",
+    description: "Interactive client and server logic scripting.",
+    role: "Manipulating DOM states, handling API requests, and coding Node processes.",
+    projects: ["SmartCampus AI", "Full-Stack Portfolio"],
+    experience: "Used extensively for all web interfaces."
+  },
   // Database
-  { name: "MongoDB", category: "DATABASE", level: "WORKING KNOWLEDGE" },
+  {
+    name: "MongoDB",
+    category: "DATABASE",
+    level: "WORKING KNOWLEDGE",
+    description: "Flexible, non-relational document database.",
+    role: "Schema model binding, indices organization, and records querying.",
+    projects: ["SmartCampus AI", "Full-Stack Portfolio"],
+    experience: "Core database layer in MERN projects."
+  },
   // Systems / Engineering
-  { name: "Digital Logic Design", category: "HARDWARE & SYSTEMS", level: "CURRENTLY EXPLORING" },
-  { name: "Verilog", category: "HARDWARE & SYSTEMS", level: "CURRENTLY EXPLORING" },
-  { name: "FPGA", category: "HARDWARE & SYSTEMS", level: "CURRENTLY EXPLORING" },
+  {
+    name: "Digital Logic Design",
+    category: "HARDWARE & SYSTEMS",
+    level: "CURRENTLY EXPLORING",
+    description: "Discrete combinational and sequential circuit design concepts.",
+    role: "Hardware architectural layout planning and logic optimization.",
+    projects: ["FPGA / Digital Logic Design"],
+    experience: "ECE - VLSI academic focus areas."
+  },
+  {
+    name: "Verilog",
+    category: "HARDWARE & SYSTEMS",
+    level: "CURRENTLY EXPLORING",
+    description: "Hardware Description Language (HDL) for coding silicon structures.",
+    role: "Implementing RTL design descriptions and testbench verification.",
+    projects: ["Verilog hardware systems", "FPGA / Digital Logic Design"],
+    experience: "VLSI course lab design practices."
+  },
+  {
+    name: "FPGA",
+    category: "HARDWARE & SYSTEMS",
+    level: "CURRENTLY EXPLORING",
+    description: "Field Programmable Gate Array silicon logic validation boards.",
+    role: "Synthesizing RTL code and programming targets physically.",
+    projects: ["Verilog hardware systems", "FPGA / Digital Logic Design"],
+    experience: "Testing digital cores on physical boards."
+  },
   // Development
-  { name: "Git", category: "DEVELOPMENT", level: "WORKING KNOWLEDGE" }
+  {
+    name: "Git",
+    category: "DEVELOPMENT",
+    level: "WORKING KNOWLEDGE",
+    description: "Distributed version control system.",
+    role: "Staging modifications, committing milestones, and managing codebase histories.",
+    projects: ["Full-Stack Portfolio", "SmartCampus AI"],
+    experience: "Utilized across all software codebases."
+  }
 ];
 
 const realProfile = {

@@ -221,3 +221,12 @@
   font-size: 0.68rem;
   font-family: monospace;
 }
+
+.readout-skill-role,
+.readout-skill-exp {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+  margin: 2px 0 0;
+}
+
