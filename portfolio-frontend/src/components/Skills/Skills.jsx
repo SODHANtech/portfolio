@@ -10,7 +10,7 @@ export default function Skills() {
   const [error, setError] = useState(null);
   const [activeCategory, setActiveCategory] = useState("");
 
-  useEffect(() => {
+  const loadSkills = () => {
     api
       .get("/skills")
       .then((res) => {
@@ -27,7 +27,17 @@ export default function Skills() {
       .finally(() => {
         setLoading(false);
       });
+  };
+
+  useEffect(() => {
+    loadSkills();
   }, []);
+
+  const handleRetry = () => {
+    setLoading(true);
+    setError(null);
+    loadSkills();
+  };
 
   // Group skills dynamically by their category
   const groupedSkills = skills.reduce((acc, skill) => {
@@ -81,6 +91,9 @@ export default function Skills() {
         {error && (
           <div className="skills-message error-message">
             <p className="hud-text glow-red">SYSTEM CONNECTION UNAVAILABLE</p>
+            <button className="hud-retry-btn" onClick={handleRetry} style={{ marginTop: "15px" }}>
+              [ RETRY CONNECTION ]
+            </button>
           </div>
         )}
 

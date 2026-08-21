@@ -1873,3 +1873,31 @@ footer {
   color: var(--text-muted);
   line-height: 1.5;
 }
+
+.hud-retry-btn {
+  display: inline-block;
+  padding: 8px 16px;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  color: #ef4444;
+  font-family: monospace;
+  font-size: 0.8rem;
+  font-weight: bold;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  letter-spacing: 0.05em;
+  transition: all var(--transition);
+  margin-top: 10px;
+}
+
+.hud-retry-btn:hover {
+  background: rgba(239, 68, 68, 0.25);
+  border-color: #ef4444;
+  box-shadow: 0 0 15px rgba(239, 68, 68, 0.3);
+  transform: translateY(-1px);
+}
+
+.hud-retry-btn:active {
+  transform: translateY(0);
+}
+

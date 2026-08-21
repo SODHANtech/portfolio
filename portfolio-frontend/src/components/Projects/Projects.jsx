@@ -8,7 +8,7 @@ export default function Projects() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  useEffect(() => {
+  const loadProjects = () => {
     api
       .get("/projects")
       .then((res) => {
@@ -16,12 +16,22 @@ export default function Projects() {
       })
       .catch((err) => {
         console.error(err);
-        setError("Unable to load projects.");
+        setError("SYSTEM DATA LINK UNAVAILABLE");
       })
       .finally(() => {
         setLoading(false);
       });
+  };
+
+  useEffect(() => {
+    loadProjects();
   }, []);
+
+  const handleRetry = () => {
+    setLoading(true);
+    setError("");
+    loadProjects();
+  };
 
   // Separate flagship from secondary operations
   const flagship = projects.find((p) => p.featured) || projects[0];
@@ -44,20 +54,23 @@ export default function Projects() {
         {loading && (
           <div className="projects-message">
             <div className="loading-spinner"></div>
-            <p>Loading projects...</p>
+            <p className="hud-text glow-cyan">SYSTEM READING ACTIVE DOSSIERS...</p>
           </div>
         )}
 
         {error && (
-          <p className="projects-message error-message">
-            {error}
-          </p>
+          <div className="projects-message error-message">
+            <p className="hud-text glow-red">{error}</p>
+            <button className="hud-retry-btn" onClick={handleRetry}>
+              [ RETRY CONNECTION ]
+            </button>
+          </div>
         )}
 
         {!loading && !error && projects.length === 0 && (
-          <p className="projects-message">
-            No projects found.
-          </p>
+          <div className="projects-message">
+            <p className="hud-text glow-yellow">NO ACTIVE OPERATIONS LOGGED</p>
+          </div>
         )}
 
         {!loading && !error && projects.length > 0 && (

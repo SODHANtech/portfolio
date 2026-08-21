@@ -21,7 +21,7 @@ export default function Journey() {
   const [pathLength, setPathLength] = useState(0);
 
   // 1. Fetch learning progression phases from MongoDB Atlas
-  useEffect(() => {
+  const loadJourney = () => {
     api
       .get("/journey")
       .then((res) => {
@@ -35,7 +35,17 @@ export default function Journey() {
       .finally(() => {
         setLoading(false);
       });
+  };
+
+  useEffect(() => {
+    loadJourney();
   }, []);
+
+  const handleRetry = () => {
+    setLoading(true);
+    setError(null);
+    loadJourney();
+  };
 
   // 2. Manage responsiveness & reduced motion settings
   useEffect(() => {
@@ -135,6 +145,9 @@ export default function Journey() {
           {error && (
             <div className="journey-message error-message">
               <p className="hud-text glow-red">SYSTEM CONNECTION UNAVAILABLE</p>
+              <button className="hud-retry-btn" onClick={handleRetry} style={{ marginTop: "15px" }}>
+                [ RETRY CONNECTION ]
+              </button>
             </div>
           )}
 

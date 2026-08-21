@@ -92,9 +92,9 @@ export default function ProjectCard({ project, index, isFlagship }) {
           )}
 
           <div className="project-actions-hud">
-            {project.liveUrl && (
+            {project.liveUrl && project.liveUrl.trim() !== "" && (
               <a
-                href={project.liveUrl}
+                href={project.liveUrl.trim()}
                 target="_blank"
                 rel="noreferrer"
                 className="project-hud-btn primary"
@@ -103,9 +103,9 @@ export default function ProjectCard({ project, index, isFlagship }) {
               </a>
             )}
 
-            {project.githubUrl && (
+            {project.githubUrl && project.githubUrl.trim() !== "" && (
               <a
-                href={project.githubUrl}
+                href={project.githubUrl.trim()}
                 target="_blank"
                 rel="noreferrer"
                 className="project-hud-btn"

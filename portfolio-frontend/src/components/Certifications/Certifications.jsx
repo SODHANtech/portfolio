@@ -42,7 +42,7 @@ export default function Certifications() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
+  const loadCerts = () => {
     api
       .get("/certifications")
       .then((res) => {
@@ -55,7 +55,17 @@ export default function Certifications() {
       .finally(() => {
         setLoading(false);
       });
+  };
+
+  useEffect(() => {
+    loadCerts();
   }, []);
+
+  const handleRetry = () => {
+    setLoading(true);
+    setError(null);
+    loadCerts();
+  };
 
   return (
     <section id="certifications" className="certifications-section">
@@ -79,6 +89,9 @@ export default function Certifications() {
         {error && (
           <div className="certs-message error-message">
             <p className="hud-text glow-red">SYSTEM CONNECTION UNAVAILABLE</p>
+            <button className="hud-retry-btn" onClick={handleRetry} style={{ marginTop: "15px" }}>
+              [ RETRY CONNECTION ]
+            </button>
           </div>
         )}
 

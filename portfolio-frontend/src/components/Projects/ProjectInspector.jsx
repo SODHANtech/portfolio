@@ -182,9 +182,9 @@ function ProjectInspector({ project, onClose }) {
 
         {/* ACTIONS */}
         <div className="inspector-actions">
-          {project.liveUrl && (
+          {project.liveUrl && project.liveUrl.trim() !== "" && (
             <a
-              href={project.liveUrl}
+              href={project.liveUrl.trim()}
               target="_blank"
               rel="noreferrer"
               className="inspector-button"
@@ -194,9 +194,9 @@ function ProjectInspector({ project, onClose }) {
             </a>
           )}
 
-          {project.githubUrl && (
+          {project.githubUrl && project.githubUrl.trim() !== "" && (
             <a
-              href={project.githubUrl}
+              href={project.githubUrl.trim()}
               target="_blank"
               rel="noreferrer"
               className="inspector-button"
