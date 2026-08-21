@@ -13,6 +13,7 @@ const Journey = require("./models/Journey");
 const Skill = require("./models/Skill");
 const Certification = require("./models/Certification");
 const Profile = require("./models/Profile");
+const Message = require("./models/Message");
 
 const app = express();
 
@@ -177,6 +178,57 @@ app.patch("/api/projects/:id", async (req, res) => {
     res.status(400).json({
       message: "Failed to update project",
       error: error.message,
+    });
+  }
+});
+
+const rateLimit = require("express-rate-limit");
+
+const contactLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000, // 1 hour
+  max: 5,
+  message: {
+    message: "Too many contact submissions from this IP. Please try again after an hour.",
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+app.post("/api/contact", contactLimiter, async (req, res) => {
+  try {
+    const { name, email, subject, message } = req.body;
+
+    if (!name || name.trim() === "") {
+      return res.status(400).json({ message: "Name is required." });
+    }
+    if (!email || email.trim() === "") {
+      return res.status(400).json({ message: "Email is required." });
+    }
+    const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({ message: "Please provide a valid email address." });
+    }
+    if (!message || message.trim() === "") {
+      return res.status(400).json({ message: "Message content is required." });
+    }
+
+    const newMessage = await Message.create({
+      name: name.trim(),
+      email: email.trim(),
+      subject: subject ? subject.trim() : "",
+      message: message.trim(),
+    });
+
+    console.log(`[EMAIL_HOOK_TRIGGERED]: New contact message from ${newMessage.email} persisted in DB.`);
+
+    res.status(201).json({
+      message: "Message transmitted and persisted successfully.",
+      id: newMessage._id,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "An error occurred while transmitting your message.",
+      error: process.env.NODE_ENV === "production" ? undefined : error.message,
     });
   }
 });

@@ -7,6 +7,7 @@ import Projects from "./components/Projects/Projects";
 import Skills from "./components/Skills/Skills";
 import Certifications from "./components/Certifications/Certifications";
 import RobotAvatar from "./components/RobotAvatar";
+import ContactForm from "./components/ContactForm";
 import api from "./services/api";
 
 export default function App() {
@@ -66,7 +67,6 @@ export default function App() {
   }, []);
 
   const name = profile?.name || "Sodhan Krishna Sai";
-  const email = profile?.email || "";
   const statCards = profile?.statCards || [];
 
   return (
@@ -226,16 +226,11 @@ export default function App() {
 
             <h2>Let's build something.</h2>
 
-            <p className="section-description">
-              Interested in working together or just want to connect? Feel free
-              to reach out.
+            <p className="section-description" style={{ marginBottom: "40px" }}>
+              Interested in working together or just want to connect? Send a message through the tactical link below.
             </p>
 
-            {email && (
-              <a href={`mailto:${email}`} className="primary-button">
-                Send Me an Email
-              </a>
-            )}
+            <ContactForm />
           </div>
         </section>
       </main>
