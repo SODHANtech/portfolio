@@ -12,6 +12,11 @@ import api from "./services/api";
 export default function App() {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [stats, setStats] = useState({
+    projectsCount: 0,
+    certsCount: 0,
+    apiLatency: null,
+  });
   const [bootState, setBootState] = useState(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       return "ready";
@@ -37,13 +42,23 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    api
-      .get("/profile")
-      .then((res) => {
-        setProfile(res.data);
+    const startTime = performance.now();
+    Promise.all([
+      api.get("/profile").then(res => res.data),
+      api.get("/projects").then(res => res.data).catch(() => []),
+      api.get("/certifications").then(res => res.data).catch(() => []),
+    ])
+      .then(([profileData, projectsData, certsData]) => {
+        const endTime = performance.now();
+        setProfile(profileData);
+        setStats({
+          projectsCount: projectsData.length,
+          certsCount: certsData.length,
+          apiLatency: Math.round(endTime - startTime),
+        });
       })
       .catch((err) => {
-        console.error("Failed to fetch profile configuration:", err);
+        console.error("Failed to load command core data:", err);
       })
       .finally(() => {
         setLoading(false);
@@ -104,7 +119,13 @@ export default function App() {
           <Navbar name={name} />
 
       <main>
-        <Hero profile={profile} loading={loading} />
+        <Hero
+          profile={profile}
+          projectsCount={stats.projectsCount}
+          certsCount={stats.certsCount}
+          apiLatency={stats.apiLatency}
+          loading={loading}
+        />
         <Journey />
         <Projects />
         <Skills />
