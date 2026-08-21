@@ -185,10 +185,28 @@ export default function RobotAvatar() {
         window.removeEventListener("mousemove", handleMouseMove);
         window.removeEventListener("resize", handleResize);
         cancelAnimationFrame(animationFrameId);
+
+        if (scene) {
+          scene.traverse((object) => {
+            if (object.geometry) {
+              object.geometry.dispose();
+            }
+            if (object.material) {
+              if (Array.isArray(object.material)) {
+                object.material.forEach((mat) => mat.dispose());
+              } else {
+                object.material.dispose();
+              }
+            }
+          });
+        }
+
         if (renderer && renderer.domElement && container.contains(renderer.domElement)) {
           container.removeChild(renderer.domElement);
         }
-        renderer.dispose();
+        if (renderer) {
+          renderer.dispose();
+        }
       };
     } catch (err) {
       console.error("WebGL initialization failed:", err);
