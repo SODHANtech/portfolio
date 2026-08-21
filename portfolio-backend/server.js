@@ -1,6 +1,8 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const helmet = require("helmet");
+const rateLimit = require("express-rate-limit");
 require("dotenv").config();
 
 if (!process.env.MONGO_URI) {
@@ -17,8 +19,55 @@ const Message = require("./models/Message");
 
 const app = express();
 
-app.use(cors());
+// Apply security headers
+app.use(helmet());
+
+// Restrict CORS origins
+const allowedOrigins = process.env.ALLOWED_ORIGINS
+  ? process.env.ALLOWED_ORIGINS.split(",")
+  : ["http://localhost:5173", "http://localhost:3000"];
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Access blocked by security CORS configuration"));
+      }
+    },
+    credentials: true,
+  })
+);
+
 app.use(express.json());
+
+// General rate limiter for read routes (max 100 requests per 15 mins)
+const apiLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 150,
+  message: { message: "Too many requests. Telemetry link throttled." },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+app.use("/api/", apiLimiter);
+
+// Administrator authorization middleware
+const requireAdmin = (req, res, next) => {
+  const apiKey = req.headers["x-admin-api-key"];
+  const systemKey = process.env.ADMIN_API_KEY;
+
+  if (!systemKey) {
+    console.error("CRITICAL CONFIG: ADMIN_API_KEY is not defined in backend variables.");
+    return res.status(500).json({ message: "Internal server config error." });
+  }
+
+  if (!apiKey || apiKey !== systemKey) {
+    return res.status(401).json({ message: "Access denied. Valid credentials required." });
+  }
+  next();
+};
 
 app.get("/", (req, res) => {
   res.json({
@@ -61,7 +110,7 @@ app.get("/api/skills", async (req, res) => {
   }
 });
 
-app.post("/api/skills", async (req, res) => {
+app.post("/api/skills", requireAdmin, async (req, res) => {
   try {
     const skill = await Skill.create(req.body);
     res.status(201).json(skill);
@@ -100,7 +149,7 @@ app.get("/api/profile", async (req, res) => {
   }
 });
 
-app.post("/api/profile", async (req, res) => {
+app.post("/api/profile", requireAdmin, async (req, res) => {
   try {
     let profile = await Profile.findOne();
     if (profile) {
@@ -121,7 +170,7 @@ app.post("/api/profile", async (req, res) => {
   }
 });
 
-app.post("/api/certifications", async (req, res) => {
+app.post("/api/certifications", requireAdmin, async (req, res) => {
   try {
     const certification = await Certification.create(req.body);
     res.status(201).json(certification);
@@ -133,7 +182,7 @@ app.post("/api/certifications", async (req, res) => {
   }
 });
 
-app.post("/api/journey", async (req, res) => {
+app.post("/api/journey", requireAdmin, async (req, res) => {
   try {
     const journeyNode = await Journey.create(req.body);
     res.status(201).json(journeyNode);
@@ -145,7 +194,7 @@ app.post("/api/journey", async (req, res) => {
   }
 });
 
-app.post("/api/projects", async (req, res) => {
+app.post("/api/projects", requireAdmin, async (req, res) => {
   try {
     const project = await Project.create(req.body);
     res.status(201).json(project);
@@ -156,8 +205,11 @@ app.post("/api/projects", async (req, res) => {
     });
   }
 });
-app.patch("/api/projects/:id", async (req, res) => {
+app.patch("/api/projects/:id", requireAdmin, async (req, res) => {
   try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(400).json({ message: "Invalid project ID identifier format." });
+    }
     const project = await Project.findByIdAndUpdate(
       req.params.id,
       req.body,
@@ -181,8 +233,6 @@ app.patch("/api/projects/:id", async (req, res) => {
     });
   }
 });
-
-const rateLimit = require("express-rate-limit");
 
 const contactLimiter = rateLimit({
   windowMs: 60 * 60 * 1000, // 1 hour
@@ -233,7 +283,15 @@ app.post("/api/contact", contactLimiter, async (req, res) => {
   }
 });
 
-const PORT = process.env.PORT || 5000;
+app.use((err, req, res, next) => {
+  console.error("Global system error:", err.stack);
+  res.status(err.status || 500).json({
+    message: err.message || "Internal command interface error.",
+    error: process.env.NODE_ENV === "production" ? undefined : err.stack,
+  });
+});
+
+const PORT = process.env.PORT || 5000; // Reload trigger
 
 mongoose
   .connect(process.env.MONGO_URI)
