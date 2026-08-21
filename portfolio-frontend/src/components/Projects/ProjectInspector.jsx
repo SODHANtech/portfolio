@@ -55,9 +55,12 @@ function ProjectInspector({ project, onClose }) {
   if (!project) return null;
 
   return (
-    <div className="inspector-backdrop" onClick={onClose}>
+    <div className="inspector-backdrop" onClick={onClose} role="none">
       <motion.div
         className="project-inspector"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="inspector-title"
         initial={{ opacity: 0, scale: 0.94, y: 30 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.94, y: 30 }}
@@ -92,7 +95,7 @@ function ProjectInspector({ project, onClose }) {
               PROJECT INSPECTOR
             </span>
 
-            <h2>{project.title}</h2>
+            <h2 id="inspector-title">{project.title}</h2>
 
             {project.tagline && (
               <h3 className="inspector-tagline">
