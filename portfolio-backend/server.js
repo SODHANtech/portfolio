@@ -41,7 +41,7 @@ app.use(
   })
 );
 
-app.use(express.json());
+app.use(express.json({ limit: "10kb" }));
 
 // General rate limiter for read routes (max 100 requests per 15 mins)
 const apiLimiter = rateLimit({
