@@ -3,20 +3,20 @@ import { AnimatePresence, motion } from "framer-motion";
 import Tilt from "react-parallax-tilt";
 import ProjectInspector from "./ProjectInspector";
 
-export default function ProjectCard({ project, index, isFlagship }) {
+export default function ProjectCard({ project, index, isFlagship, isCompact }) {
   const [showInspector, setShowInspector] = useState(false);
 
   const cardContent = (
-    <article className={`project-card hud-panel ${isFlagship ? "flagship-dossier" : "secondary-dossier"}`}>
+    <article className={`project-card hud-panel ${isFlagship ? "flagship-dossier" : isCompact ? "compact-dossier" : "secondary-dossier"}`}>
       <div className="hud-panel-header">
-        <span>{isFlagship ? "FLAGSHIP_OPERATION" : `SEC_LOG_0${index + 1}`}</span>
+        <span>{isFlagship ? "FLAGSHIP_OPERATION" : isCompact ? `EXP_LAB_0${index + 1}` : `SEC_LOG_0${index + 1}`}</span>
         <span className={project.featured ? "glow-purple" : "glow-cyan"}>
-          {project.featured ? "FEATURED_CORE" : "SYS_MODULE"}
+          {isFlagship ? "FEATURED_CORE" : isCompact ? "EXP_SUBMODULE" : "SYS_MODULE"}
         </span>
       </div>
 
       <div className="hud-panel-content">
-        {project.imageUrl && (
+        {project.imageUrl && !isCompact && (
           <div className="project-image-wrapper">
             <img
               src={project.imageUrl}

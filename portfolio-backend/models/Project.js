@@ -56,6 +56,41 @@ const projectSchema = new mongoose.Schema(
       default: "BUILDING",
       trim: true,
     },
+
+    tier: {
+      type: String,
+      enum: ["flagship", "secondary", "experimental"],
+      default: "secondary",
+      trim: true,
+    },
+
+    purpose: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+
+    problemSolved: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+
+    architectureType: {
+      type: String,
+      default: "MERN",
+      trim: true,
+    },
+
+    features: {
+      type: [String],
+      default: [],
+    },
+
+    security: {
+      type: [String],
+      default: [],
+    },
   },
   {
     timestamps: true,

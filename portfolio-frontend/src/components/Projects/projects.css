@@ -624,3 +624,85 @@
     width: 100%;
   }
 }
+
+/* =========================================================
+   EXPERIMENTAL & COMPACT DOSSIER LAYOUTS
+   ========================================================= */
+
+.experimentals-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+}
+
+@media (max-width: 768px) {
+  .experimentals-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.project-card.compact-dossier {
+  min-height: 220px;
+}
+
+.project-card.compact-dossier .project-info-wrap {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.project-card.compact-dossier .project-desc-hud {
+  font-size: 0.85rem;
+  line-height: 1.5;
+  margin-bottom: 16px;
+  flex-grow: 1;
+}
+
+.project-card.compact-dossier h3 {
+  font-size: 1.1rem;
+  margin-bottom: 6px;
+}
+
+.project-card.compact-dossier .project-actions-hud {
+  margin-top: auto;
+  padding-top: 10px;
+}
+
+.inspector-mission-wrap {
+  display: flex;
+  flex-direction: column;
+  background: rgba(6, 182, 212, 0.02);
+  border: 1px solid rgba(6, 182, 212, 0.08);
+  border-radius: var(--radius-sm);
+  padding: 16px;
+}
+
+.mission-item p {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+.inspector-list-hud {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.inspector-list-hud li {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.inspector-list-hud li .technical-label {
+  flex-shrink: 0;
+}
+
+

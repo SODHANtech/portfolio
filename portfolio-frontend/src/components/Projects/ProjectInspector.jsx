@@ -1,6 +1,41 @@
 import { useEffect } from "react";
 import { motion } from "framer-motion";
-import { X, ExternalLink, Database, Server, Monitor } from "lucide-react";
+import { X, ExternalLink, Database, Server, Monitor, Cpu } from "lucide-react";
+
+const getArchitectureNodes = (type) => {
+  switch (type) {
+    case "MERN":
+      return [
+        { label: "React Frontend", icon: Monitor },
+        { label: "Express API", icon: Server },
+        { label: "MongoDB Atlas", icon: Database }
+      ];
+    case "python-script":
+      return [
+        { label: "Python Runtime", icon: Cpu },
+        { label: "Core Script Logic", icon: Server },
+        { label: "SQL/Data Storage", icon: Database }
+      ];
+    case "hardware-sensor":
+      return [
+        { label: "Sensor / Camera Input", icon: Monitor },
+        { label: "Microcontroller / Pi", icon: Cpu },
+        { label: "Actuators / Motor Driver", icon: Database }
+      ];
+    case "FPGA-verilog":
+      return [
+        { label: "Verilog RTL Modules", icon: Cpu },
+        { label: "Logic Synthesis", icon: Server },
+        { label: "FPGA Silicon Target", icon: Database }
+      ];
+    default:
+      return [
+        { label: "User Interface", icon: Monitor },
+        { label: "Process Engine", icon: Server },
+        { label: "Data Warehouse", icon: Database }
+      ];
+  }
+};
 
 function ProjectInspector({ project, onClose }) {
   useEffect(() => {
@@ -108,37 +143,56 @@ function ProjectInspector({ project, onClose }) {
           </div>
         </section>
 
+        {/* MISSION */}
+        {(project.purpose || project.problemSolved) && (
+          <section className="inspector-section">
+            <span className="inspector-label">
+              MISSION
+            </span>
+            <div className="inspector-mission-wrap">
+              {project.purpose && (
+                <div className="mission-item">
+                  <span className="technical-label">PROJECT_PURPOSE:</span>
+                  <p>{project.purpose}</p>
+                </div>
+              )}
+              {project.problemSolved && (
+                <div className="mission-item" style={{ marginTop: "12px" }}>
+                  <span className="technical-label">PROBLEM_SOLVED:</span>
+                  <p>{project.problemSolved}</p>
+                </div>
+              )}
+            </div>
+          </section>
+        )}
+
         {/* ARCHITECTURE */}
-        <section className="inspector-section">
-          <span className="inspector-label">
-            ARCHITECTURE
-          </span>
+        {project.architectureType && (
+          <section className="inspector-section">
+            <span className="inspector-label">
+              ARCHITECTURE
+            </span>
 
-          <div className="architecture">
-            <div className="architecture-node">
-              <Monitor size={20} />
-              <span>React Frontend</span>
+            <div className="architecture">
+              {getArchitectureNodes(project.architectureType).map((node, nIdx, arr) => {
+                const IconComponent = node.icon;
+                return (
+                  <div key={nIdx} style={{ display: "contents" }}>
+                    <div className="architecture-node">
+                      <IconComponent size={20} />
+                      <span>{node.label}</span>
+                    </div>
+                    {nIdx < arr.length - 1 && (
+                      <div className="architecture-arrow">
+                        ↓
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
             </div>
-
-            <div className="architecture-arrow">
-              ↓
-            </div>
-
-            <div className="architecture-node">
-              <Server size={20} />
-              <span>Express API</span>
-            </div>
-
-            <div className="architecture-arrow">
-              ↓
-            </div>
-
-            <div className="architecture-node">
-              <Database size={20} />
-              <span>MongoDB Atlas</span>
-            </div>
-          </div>
-        </section>
+          </section>
+        )}
 
         {/* TECH STACK */}
         <section className="inspector-section">
@@ -152,6 +206,38 @@ function ProjectInspector({ project, onClose }) {
             ))}
           </div>
         </section>
+
+        {/* KEY FEATURES */}
+        {project.features && project.features.length > 0 && (
+          <section className="inspector-section">
+            <span className="inspector-label">
+              KEY FEATURES
+            </span>
+            <ul className="inspector-list-hud">
+              {project.features.map((feature, fIdx) => (
+                <li key={fIdx}>
+                  <span className="technical-label">SYS_FEATURE_0{fIdx + 1}:</span> {feature}
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+
+        {/* SECURITY */}
+        {project.security && project.security.length > 0 && (
+          <section className="inspector-section">
+            <span className="inspector-label">
+              SECURITY
+            </span>
+            <ul className="inspector-list-hud">
+              {project.security.map((sec, sIdx) => (
+                <li key={sIdx}>
+                  <span className="technical-label">SEC_PROTOCOL_0{sIdx + 1}:</span> {sec}
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
 
         {/* PROJECT DATA */}
         <section className="inspector-section">

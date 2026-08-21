@@ -153,7 +153,13 @@ const realProjects = [
     liveUrl: "",
     imageUrl: "",
     featured: false,
-    status: "COMPLETED"
+    status: "COMPLETED",
+    tier: "experimental",
+    purpose: "Store and manage academic operations, student profiles, and database records.",
+    problemSolved: "Eliminated manual record handling by centralizing student details in a relational model.",
+    architectureType: "python-script",
+    features: ["CRUD operations on student records", "SQL query builder", "Data export"],
+    security: ["Input sanitization", "Parametrized SQL queries"]
   },
   {
     title: "SmartCampus AI",
@@ -165,7 +171,13 @@ const realProjects = [
     liveUrl: "",
     imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQhxJDnr4OYh3O2xqiWSR0drxCUk01cjpmZ4PU-3IxR2Q&s=10",
     featured: true,
-    status: "IN DEVELOPMENT"
+    status: "IN DEVELOPMENT",
+    tier: "flagship",
+    purpose: "Provide a unified smart campus AI assistant to help students navigate college services.",
+    problemSolved: "Bridged the connectivity gap between distinct campus services using LLM reasoning.",
+    architectureType: "MERN",
+    features: ["AI campus chatbot", "Multi-agent task planner", "Service status monitor"],
+    security: ["JWT auth", "Rate limits on AI endpoints", "Strict sanitization"]
   },
   {
     title: "Cricket Match Analysis",
@@ -177,7 +189,13 @@ const realProjects = [
     liveUrl: "",
     imageUrl: "",
     featured: false,
-    status: "COMPLETED"
+    status: "COMPLETED",
+    tier: "experimental",
+    purpose: "Perform predictive and historical statistics analytics on match data.",
+    problemSolved: "Streamlined raw match logs analysis using pandas and matplotlib.",
+    architectureType: "python-script",
+    features: ["Score progression charts", "Player performance metrics", "Run-rate charts"],
+    security: ["Local sandbox execution"]
   },
   {
     title: "Gesture Control Car",
@@ -189,7 +207,13 @@ const realProjects = [
     liveUrl: "",
     imageUrl: "",
     featured: false,
-    status: "COMPLETED"
+    status: "COMPLETED",
+    tier: "secondary",
+    purpose: "Control a physical vehicle model using hand gestures parsed via computer vision.",
+    problemSolved: "Replaced standard remote joysticks with low-latency media-pipe gesture tracking.",
+    architectureType: "hardware-sensor",
+    features: ["Real-time hand gesture parsing", "Microcontroller serial link", "Collision warning triggers"],
+    security: ["Local serial command bounds validation"]
   },
   {
     title: "Campus Delivery System",
@@ -201,7 +225,13 @@ const realProjects = [
     liveUrl: "",
     imageUrl: "",
     featured: false,
-    status: "IN DEVELOPMENT"
+    status: "IN DEVELOPMENT",
+    tier: "experimental",
+    purpose: "Optimize and track logistics for parcel routing inside campus.",
+    problemSolved: "Reduced delivery delays by implementing pathfinding algorithms for campus pathways.",
+    architectureType: "python-script",
+    features: ["Shortest-path generation", "Delivery status log", "Interactive node map"],
+    security: ["Sanitized route points input"]
   },
   {
     title: "Smart AI Robot",
@@ -213,7 +243,13 @@ const realProjects = [
     liveUrl: "",
     imageUrl: "",
     featured: true,
-    status: "IN DEVELOPMENT"
+    status: "IN DEVELOPMENT",
+    tier: "secondary",
+    purpose: "An autonomous robot platform integrated with local vision and reasoning loops.",
+    problemSolved: "Combines real-world sensor input with a local language model agent.",
+    architectureType: "hardware-sensor",
+    features: ["Autonomous obstacle avoidance", "Vision target tracking", "Speech command parsing"],
+    security: ["Hardware emergency stop control", "Encrypted motor command packets"]
   },
   {
     title: "FPGA / Digital Logic Design",
@@ -225,7 +261,13 @@ const realProjects = [
     liveUrl: "",
     imageUrl: "",
     featured: false,
-    status: "COMPLETED"
+    status: "COMPLETED",
+    tier: "experimental",
+    purpose: "Design and verify digital circuitry architectures on physical silicon.",
+    problemSolved: "Implemented discrete digital building blocks (adders, multiplexers) directly on hardware.",
+    architectureType: "FPGA-verilog",
+    features: ["Combinatorial logic modules", "Sequential state machines", "Physical board verification"],
+    security: ["Hardware constraint bounds checking"]
   },
   {
     title: "Verilog hardware systems",
@@ -237,7 +279,13 @@ const realProjects = [
     liveUrl: "",
     imageUrl: "",
     featured: false,
-    status: "COMPLETED"
+    status: "COMPLETED",
+    tier: "experimental",
+    purpose: "Develop processor components and custom logic systems in HDL.",
+    problemSolved: "Model complex hardware systems with timing constraints in Verilog.",
+    architectureType: "FPGA-verilog",
+    features: ["ALU module design", "Register file design", "Logic synthesis validation"],
+    security: ["Simulation bounds assert checks"]
   },
   {
     title: "Full-Stack Portfolio",
@@ -249,7 +297,13 @@ const realProjects = [
     liveUrl: "",
     imageUrl: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=600",
     featured: false,
-    status: "COMPLETED"
+    status: "COMPLETED",
+    tier: "secondary",
+    purpose: "Construct a dark tactical HUD engineering dashboard to showcase projects, skills, and learning journey.",
+    problemSolved: "Built a modern MERN stack application with strict security controls and optimized 3D graphics.",
+    architectureType: "MERN",
+    features: ["3D cursor tracking robot avatar", "Tactical weapon rack skills armory", "Validated contact pipeline", "Dynamic project inspection dossiers"],
+    security: ["Helmet headers", "CORS source locks", "Express rate limit controls", "Admin authorization checks"]
   }
 ];
 
@@ -259,36 +313,66 @@ async function seed() {
     await mongoose.connect(process.env.MONGO_URI);
     console.log("Database connected successfully.");
 
-    // 1. Clean up and Seed Journey collection
-    console.log("Cleaning up and seeding Journey...");
-    await Journey.deleteMany({});
-    const createdJourney = await Journey.insertMany(realJourney);
-    console.log(`Seeded ${createdJourney.length} Journey phases.`);
+    const isReset = process.env.DB_RESET === "true";
 
-    // 2. Clean up and Seed Skills
-    console.log("Cleaning up and seeding Skills...");
-    await Skill.deleteMany({});
-    const createdSkills = await Skill.insertMany(realSkills);
-    console.log(`Seeded ${createdSkills.length} Skills.`);
+    if (isReset) {
+      console.log("WARNING: DB_RESET=true environment flag set. Performing destructive reset...");
 
-    // 3. Clean up Certifications (ensure it remains empty)
-    console.log("Cleaning up Certifications...");
-    await Certification.deleteMany({});
-    console.log("Certifications collection cleared.");
+      console.log("Wiping Journey...");
+      await Journey.deleteMany({});
+      const createdJourney = await Journey.insertMany(realJourney);
+      console.log(`Seeded ${createdJourney.length} Journey phases.`);
 
-    // 4. Clean up and Seed Profile
-    console.log("Cleaning up and seeding Profile configuration...");
-    await Profile.deleteMany({});
-    const profileDoc = await Profile.create(realProfile);
-    console.log(`Seeded global profile document for: ${profileDoc.name}`);
+      console.log("Wiping Skills...");
+      await Skill.deleteMany({});
+      const createdSkills = await Skill.insertMany(realSkills);
+      console.log(`Seeded ${createdSkills.length} Skills.`);
 
-    // 5. Clean up and Seed Projects
-    console.log("Cleaning up and seeding Projects...");
-    await Project.deleteMany({});
-    const createdProjects = await Project.insertMany(realProjects);
-    console.log(`Seeded ${createdProjects.length} Projects.`);
+      console.log("Wiping Certifications...");
+      await Certification.deleteMany({});
+      console.log("Certifications collection cleared.");
 
-    console.log("Database content correction completed successfully!");
+      console.log("Wiping Profile...");
+      await Profile.deleteMany({});
+      const profileDoc = await Profile.create(realProfile);
+      console.log(`Seeded global profile document for: ${profileDoc.name}`);
+
+      console.log("Wiping Projects...");
+      await Project.deleteMany({});
+      const createdProjects = await Project.insertMany(realProjects);
+      console.log(`Seeded ${createdProjects.length} Projects.`);
+    } else {
+      console.log("Safe seeding mode. Performing idempotent upserts...");
+
+      // 1. Safe Journey Upserts
+      for (const item of realJourney) {
+        await Journey.findOneAndUpdate({ phase: item.phase }, item, { upsert: true, new: true });
+      }
+      console.log("Journey upsert completed.");
+
+      // 2. Safe Skills Upserts
+      for (const item of realSkills) {
+        await Skill.findOneAndUpdate({ name: item.name }, item, { upsert: true, new: true });
+      }
+      console.log("Skills upsert completed.");
+
+      // 3. Safe Profile Upsert (always update the single document)
+      const existingProfile = await Profile.findOne();
+      if (existingProfile) {
+        await Profile.findByIdAndUpdate(existingProfile._id, realProfile, { new: true });
+      } else {
+        await Profile.create(realProfile);
+      }
+      console.log("Profile upsert completed.");
+
+      // 4. Safe Projects Upserts
+      for (const item of realProjects) {
+        await Project.findOneAndUpdate({ title: item.title }, item, { upsert: true, new: true });
+      }
+      console.log("Projects upsert completed.");
+    }
+
+    console.log("Database operation completed successfully!");
     process.exit(0);
   } catch (error) {
     console.error("Migration failed:", error);

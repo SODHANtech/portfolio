@@ -33,9 +33,10 @@ export default function Projects() {
     loadProjects();
   };
 
-  // Separate flagship from secondary operations
-  const flagship = projects.find((p) => p.featured) || projects[0];
-  const secondaries = projects.filter((p) => p !== flagship);
+  // Separate flagship, secondary, and experimental operations
+  const flagship = projects.find((p) => p.tier === "flagship") || projects.find((p) => p.featured) || projects[0];
+  const secondaries = projects.filter((p) => p.tier === "secondary" && p !== flagship);
+  const experimentals = projects.filter((p) => p.tier === "experimental" && p !== flagship);
 
   return (
     <section id="projects" className="projects-section">
@@ -103,6 +104,30 @@ export default function Projects() {
                     project={project}
                     index={projects.indexOf(project)}
                     isFlagship={false}
+                    isCompact={false}
+                  />
+                ))}
+              </div>
+            )}
+
+            {/* Experimental operations separator line */}
+            {experimentals.length > 0 && (
+              <div className="secondaries-header-hud" style={{ marginTop: "40px" }}>
+                <span>EXPERIMENTAL_SUBMODULES</span>
+                <span className="hud-line-glow"></span>
+              </div>
+            )}
+
+            {/* Experimentals Bento Grid */}
+            {experimentals.length > 0 && (
+              <div className="experimentals-grid">
+                {experimentals.map((project) => (
+                  <ProjectCard
+                    key={project._id}
+                    project={project}
+                    index={projects.indexOf(project)}
+                    isFlagship={false}
+                    isCompact={true}
                   />
                 ))}
               </div>
