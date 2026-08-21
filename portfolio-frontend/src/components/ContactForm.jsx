@@ -42,15 +42,25 @@ export default function ContactForm() {
     addLog("COM_LINK: DISPATCHING_PACKETS...");
 
     try {
-      await api.post("/contact", {
+      const response = await api.post("/contact", {
         name: formData.name.trim(),
         email: formData.email.trim(),
         subject: formData.subject.trim(),
         message: formData.message.trim(),
       });
-      setStatus("SUCCESS");
-      addLog("TRANSMISSION_COMPLETE: SUCCESS_201");
-      setFormData({ name: "", email: "", subject: "", message: "" });
+
+      const data = response.data;
+      if (data.status === "SUCCESS") {
+        setStatus("SUCCESS");
+        addLog("COM_LINK: TRANSMISSION_RECEIVED");
+        addLog("NOTIFICATION: DISPATCH_SUCCESS");
+        setFormData({ name: "", email: "", subject: "", message: "" });
+      } else if (data.status === "PARTIAL") {
+        setStatus("PARTIAL");
+        addLog("COM_LINK: PACKET_STORED");
+        addLog("WARNING: NOTIFICATION_FAILED");
+        setFormData({ name: "", email: "", subject: "", message: "" });
+      }
     } catch (err) {
       console.error(err);
       setStatus("ERROR");
@@ -64,7 +74,7 @@ export default function ContactForm() {
     <div className="contact-form-hud hud-panel">
       <div className="hud-panel-header">
         <span>TACTICAL_COMMUNICATION_LINK</span>
-        <span className={status === "SUCCESS" ? "glow-green" : status === "ERROR" ? "glow-red" : "glow-cyan"}>
+        <span className={status === "SUCCESS" ? "glow-green" : status === "PARTIAL" ? "glow-yellow" : status === "ERROR" ? "glow-red" : "glow-cyan"}>
           {status}
         </span>
       </div>
@@ -134,7 +144,13 @@ export default function ContactForm() {
 
           {status === "SUCCESS" && (
             <div className="form-success-hud glow-green text-center">
-              TRANSMISSION RECEIVED. PACKETS SAVED SECURELY.
+              TRANSMISSION_RECEIVED: NOTIFICATION_DELIVERED
+            </div>
+          )}
+
+          {status === "PARTIAL" && (
+            <div className="form-success-hud glow-yellow text-center" style={{ background: "rgba(234, 179, 8, 0.08)", border: "1px solid rgba(234, 179, 8, 0.2)" }}>
+              TRANSMISSION_PARTIAL: PACKET_STORED, NOTIFICATION_DELIVERY_FAILED
             </div>
           )}
 

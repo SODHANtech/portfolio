@@ -1128,6 +1128,11 @@ footer {
   text-shadow: 0 0 10px rgba(234, 179, 8, 0.5);
 }
 
+.glow-green {
+  color: #10b981;
+  text-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+}
+
 /* Responsive timeline for mobile */
 @media (max-width: 768px) {
   .journey-timeline-bar {

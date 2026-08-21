@@ -4,6 +4,7 @@ const cors = require("cors");
 const helmet = require("helmet");
 const rateLimit = require("express-rate-limit");
 require("dotenv").config();
+const nodemailer = require("nodemailer");
 
 if (!process.env.MONGO_URI) {
   console.error("FATAL ERROR: MONGO_URI is not defined in the environment or .env file.");
@@ -244,37 +245,140 @@ const contactLimiter = rateLimit({
   legacyHeaders: false,
 });
 
+const sendNotificationEmail = async (messageData) => {
+  const { name, email, subject, message, createdAt } = messageData;
+
+  const receiver = process.env.CONTACT_RECEIVER_EMAIL || "sodhankrishnasai@gmail.com";
+  const smtpHost = process.env.SMTP_HOST;
+  const smtpPort = parseInt(process.env.SMTP_PORT || "587", 10);
+  const smtpUser = process.env.SMTP_USER;
+  const smtpPass = process.env.SMTP_PASS;
+  const smtpFrom = process.env.SMTP_FROM;
+
+  if (!smtpHost || !smtpUser || !smtpPass || !smtpFrom) {
+    throw new Error("SMTP configuration is missing or incomplete in environment.");
+  }
+
+  const transporter = nodemailer.createTransport({
+    host: smtpHost,
+    port: smtpPort,
+    secure: smtpPort === 465,
+    auth: {
+      user: smtpUser,
+      pass: smtpPass,
+    },
+  });
+
+  const mailOptions = {
+    from: `"${name} via HUD Portal" <${smtpFrom}>`,
+    to: receiver,
+    replyTo: email,
+    subject: `New Portfolio Message: ${subject || "No Subject"}`,
+    text: `--------------------------------
+NEW PORTFOLIO CONTACT MESSAGE
+--------------------------------
+
+From:
+${name}
+
+Email:
+${email}
+
+Subject:
+${subject || "No Subject"}
+
+Message:
+${message}
+
+Received:
+${new Date(createdAt).toLocaleString()}
+
+--------------------------------
+Portfolio Contact System
+--------------------------------`,
+  };
+
+  await transporter.sendMail(mailOptions);
+};
+
 app.post("/api/contact", contactLimiter, async (req, res) => {
   try {
     const { name, email, subject, message } = req.body;
 
-    if (!name || name.trim() === "") {
+    // Strict input type checking
+    if (typeof name !== "string" || typeof email !== "string" || typeof message !== "string") {
+      return res.status(400).json({ message: "Invalid payload input type format." });
+    }
+    if (subject && typeof subject !== "string") {
+      return res.status(400).json({ message: "Invalid subject type format." });
+    }
+
+    const trimmedName = name.trim();
+    const trimmedEmail = email.trim();
+    const trimmedSubject = subject ? subject.trim() : "";
+    const trimmedMessage = message.trim();
+
+    if (trimmedName === "") {
       return res.status(400).json({ message: "Name is required." });
     }
-    if (!email || email.trim() === "") {
+    if (trimmedEmail === "") {
       return res.status(400).json({ message: "Email is required." });
     }
     const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
-    if (!emailRegex.test(email)) {
+    if (!emailRegex.test(trimmedEmail)) {
       return res.status(400).json({ message: "Please provide a valid email address." });
     }
-    if (!message || message.trim() === "") {
+    if (trimmedMessage === "") {
       return res.status(400).json({ message: "Message content is required." });
     }
 
+    // Length validation
+    if (trimmedName.length > 100) {
+      return res.status(400).json({ message: "Name cannot exceed 100 characters." });
+    }
+    if (trimmedEmail.length > 150) {
+      return res.status(400).json({ message: "Email cannot exceed 150 characters." });
+    }
+    if (trimmedSubject.length > 150) {
+      return res.status(400).json({ message: "Subject cannot exceed 150 characters." });
+    }
+    if (trimmedMessage.length < 10) {
+      return res.status(400).json({ message: "Message content must be at least 10 characters." });
+    }
+    if (trimmedMessage.length > 2000) {
+      return res.status(400).json({ message: "Message content cannot exceed 2000 characters." });
+    }
+
+    // Save message to MongoDB
     const newMessage = await Message.create({
-      name: name.trim(),
-      email: email.trim(),
-      subject: subject ? subject.trim() : "",
-      message: message.trim(),
+      name: trimmedName,
+      email: trimmedEmail,
+      subject: trimmedSubject,
+      message: trimmedMessage,
     });
 
-    console.log(`[EMAIL_HOOK_TRIGGERED]: New contact message from ${newMessage.email} persisted in DB.`);
+    console.log(`[DATABASE_SUCCESS]: Message saved. ID: ${newMessage._id}`);
 
-    res.status(201).json({
-      message: "Message transmitted and persisted successfully.",
-      id: newMessage._id,
-    });
+    // Try email delivery
+    try {
+      await sendNotificationEmail(newMessage);
+      console.log(`[EMAIL_SUCCESS]: Notification delivered to recipient.`);
+      
+      return res.status(201).json({
+        status: "SUCCESS",
+        message: "Message transmitted and notification delivered successfully.",
+        id: newMessage._id,
+      });
+    } catch (emailError) {
+      console.error("[EMAIL_FAILURE]: Stored successfully in DB, but email notification delivery failed:", emailError.message);
+      
+      // Return 202 Accepted: Saved but notification pending/failed
+      return res.status(202).json({
+        status: "PARTIAL",
+        message: "Message received and stored, but email notification delivery failed.",
+        id: newMessage._id,
+      });
+    }
   } catch (error) {
     res.status(500).json({
       message: "An error occurred while transmitting your message.",
