@@ -3,6 +3,11 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 require("dotenv").config();
 
+if (!process.env.MONGO_URI) {
+  console.error("FATAL ERROR: MONGO_URI is not defined in the environment or .env file.");
+  process.exit(1);
+}
+
 const Project = require("./models/Project");
 const Journey = require("./models/Journey");
 const Skill = require("./models/Skill");
