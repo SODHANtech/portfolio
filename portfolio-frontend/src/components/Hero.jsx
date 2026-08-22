@@ -1,6 +1,5 @@
 export default function Hero({ profile, projectsCount, certsCount: _certsCount, apiLatency }) {
   const name = profile?.name || "Sodhan Krishna Sai";
-  const headline = profile?.headline || "FULL-STACK DEVELOPER";
   const description = profile?.description || "I build modern, responsive web applications using React, Node.js, Express, and MongoDB.";
   const techHighlights = profile?.techHighlights || ["React", "Node.js", "Express", "MongoDB", "Python", "Verilog"];
 
@@ -17,15 +16,6 @@ export default function Hero({ profile, projectsCount, certsCount: _certsCount, 
       <div className="hero-hud-split">
         {/* Left Side: Profile Dossier */}
         <div className="hero-content left-align">
-          <div className="hero-badge">
-            <span className="status-dot"></span>
-            SYSTEM STATUS — AVAILABLE FOR OPPORTUNITIES
-          </div>
-
-          <p className="hero-small">
-            {headline.toUpperCase()}
-          </p>
-
           <h1>
             Hi, I'm <br className="hero-br" />
             <span>{name}</span>
