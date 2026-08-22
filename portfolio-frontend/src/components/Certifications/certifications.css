@@ -242,25 +242,8 @@
   transform: rotateX(14deg) rotateY(-28deg);
 }
 
-/* 3D Lid Panel Structure (Height: 40px, Width: 320px, Depth: 160px) */
-.chest-lid {
-  width: 320px;
-  height: 40px;
-  position: absolute;
-  top: 10px;
-  left: 0;
-  transform-style: preserve-3d;
-  transform-origin: 50% 100% -80px; /* CRITICAL FIX: exact back bottom edge coordinates */
-  transition: transform 850ms cubic-bezier(0.22, 1, 0.36, 1);
-  z-index: 2;
-}
-
-/* Lid rotation backward when open */
-.cyber-chest.is-open .chest-lid {
-  transform: rotateX(-115deg);
-}
-
-.chest-lid-panel {
+/* 3D Chest Panel Base Structure (Height: 140px, Width: 320px, Depth: 160px) */
+.chest-panel {
   position: absolute;
   left: 50%;
   top: 50%;
@@ -270,136 +253,90 @@
   box-sizing: border-box;
 }
 
-.chest-lid-panel.front {
+/* Sliding Front Panel Door */
+.chest-panel.front {
   width: 320px;
-  height: 40px;
+  height: 140px;
   margin-left: -160px;
-  margin-top: -20px;
-  transform: translateZ(80px);
+  margin-top: -70px;
+  transform: translateZ(80px) translateX(0);
+  transition: transform 800ms cubic-bezier(0.22, 1, 0.36, 1);
+  z-index: 3;
 }
 
-.chest-lid-panel.back {
+/* Slide open to the right when active */
+.cyber-chest.is-open .chest-panel.front {
+  transform: translateZ(80px) translateX(280px);
+}
+
+/* Glow interior revealed behind sliding door */
+.chest-panel.interior {
+  width: 312px;
+  height: 132px;
+  margin-left: -156px;
+  margin-top: -66px;
+  transform: translateZ(74px);
+  background: radial-gradient(circle at center, rgba(139, 92, 246, 0.5) 0%, rgba(6, 182, 212, 0.2) 60%, #080d1a 100%);
+  border: 2px solid rgba(6, 182, 212, 0.3);
+  box-shadow: inset 0 0 15px rgba(139, 92, 246, 0.3);
+  z-index: 1;
+}
+
+.chest-panel.back {
   width: 320px;
-  height: 40px;
+  height: 140px;
   margin-left: -160px;
-  margin-top: -20px;
+  margin-top: -70px;
   transform: rotateY(180deg) translateZ(80px);
+  z-index: 0;
 }
 
-.chest-lid-panel.top {
+.chest-panel.top {
   width: 320px;
   height: 160px;
   margin-left: -160px;
   margin-top: -80px;
-  transform: rotateX(-90deg) translateZ(20px);
-  background: 
-    radial-gradient(circle at center, rgba(6, 182, 212, 0.15), transparent 70%),
-    #251610;
+  transform: rotateX(90deg) translateZ(70px);
+  z-index: 0;
 }
 
-.chest-lid-panel.left {
-  width: 160px;
-  height: 40px;
-  margin-left: -80px;
-  margin-top: -20px;
-  transform: rotateY(-90deg) translateZ(160px);
-}
-
-.chest-lid-panel.right {
-  width: 160px;
-  height: 40px;
-  margin-left: -80px;
-  margin-top: -20px;
-  transform: rotateY(90deg) translateZ(160px);
-}
-
-/* 3D Base Panel Structure (Height: 100px, Width: 320px, Depth: 160px) */
-.chest-base {
-  width: 320px;
-  height: 100px;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  transform-style: preserve-3d;
-}
-
-.chest-base-panel {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  background: #20130d; /* Slightly darker base wood color */
-  border: 4px solid #140d0a;
-  box-shadow: inset 0 0 10px rgba(6, 182, 212, 0.35);
-  box-sizing: border-box;
-}
-
-.chest-base-panel.front {
-  width: 320px;
-  height: 100px;
-  margin-left: -160px;
-  margin-top: -50px;
-  transform: translateZ(80px);
-}
-
-.chest-base-panel.back {
-  width: 320px;
-  height: 100px;
-  margin-left: -160px;
-  margin-top: -50px;
-  transform: rotateY(180deg) translateZ(80px);
-}
-
-.chest-base-panel.left {
-  width: 160px;
-  height: 100px;
-  margin-left: -80px;
-  margin-top: -50px;
-  transform: rotateY(-90deg) translateZ(160px);
-}
-
-.chest-base-panel.right {
-  width: 160px;
-  height: 100px;
-  margin-left: -80px;
-  margin-top: -50px;
-  transform: rotateY(90deg) translateZ(160px);
-}
-
-.chest-base-panel.bottom {
+.chest-panel.bottom {
   width: 320px;
   height: 160px;
   margin-left: -160px;
   margin-top: -80px;
-  transform: rotateX(90deg) translateZ(50px);
-  position: relative;
+  transform: rotateX(-90deg) translateZ(70px);
+  z-index: 0;
 }
 
-/* Glow effect inside base bottom */
-.chest-base-panel.bottom::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at center, rgba(139, 92, 246, 0.5) 0%, rgba(6, 182, 212, 0.2) 60%, transparent 100%);
-  opacity: 0;
-  transition: opacity 0.8s ease-in-out;
-  pointer-events: none;
+.chest-panel.left {
+  width: 160px;
+  height: 140px;
+  margin-left: -80px;
+  margin-top: -70px;
+  transform: rotateY(-90deg) translateZ(160px);
+  z-index: 0;
 }
 
-.cyber-chest.is-open .chest-base-panel.bottom::after {
-  opacity: 1;
+.chest-panel.right {
+  width: 160px;
+  height: 140px;
+  margin-left: -80px;
+  margin-top: -70px;
+  transform: rotateY(90deg) translateZ(160px);
+  z-index: 0;
 }
 
-/* Futuristic Minecraft Silver Lock Latch */
+/* Silver Latch Lock Box on Sliding Door */
 .chest-latch {
   width: 20px;
-  height: 38px;
+  height: 44px;
   background: #9ca3af; /* Silver color */
   border: 3px solid #374151; /* Dark iron frame */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
   position: absolute;
-  bottom: -18px; /* Hangs down past the lid line */
-  left: 50%;
-  transform: translateX(-50%);
+  top: 48px;
+  left: 150px; /* Centered horizontally (320/2 - 20/2 = 150px) */
   z-index: 10;
   display: flex;
   align-items: center;
@@ -676,36 +613,40 @@
 @media (max-width: 768px) {
   .cyber-chest {
     width: 240px;
-    height: 120px;
+    height: 110px;
   }
-  .chest-lid {
-    width: 240px;
-    height: 30px;
-    top: 10px;
-    transform-origin: 50% 100% -60px; /* Pivots around depth/2 */
-  }
-  
-  .chest-lid-panel.front { width: 240px; height: 30px; margin-left: -120px; margin-top: -15px; transform: translateZ(60px); }
-  .chest-lid-panel.back { width: 240px; height: 30px; margin-left: -120px; margin-top: -15px; transform: rotateY(180deg) translateZ(60px); }
-  .chest-lid-panel.top { width: 240px; height: 120px; margin-left: -120px; margin-top: -60px; transform: rotateX(90deg) translateZ(15px); }
-  .chest-lid-panel.bottom { width: 240px; height: 120px; margin-left: -120px; margin-top: -60px; transform: rotateX(-90deg) translateZ(15px); }
-  .chest-lid-panel.left { width: 120px; height: 30px; margin-left: -60px; margin-top: -15px; transform: rotateY(-90deg) translateZ(120px); }
-  .chest-lid-panel.right { width: 120px; height: 30px; margin-left: -60px; margin-top: -15px; transform: rotateY(90deg) translateZ(120px); }
 
-  .chest-base {
+  .chest-panel.front {
     width: 240px;
-    height: 80px;
+    height: 110px;
+    margin-left: -120px;
+    margin-top: -55px;
+    transform: translateZ(60px) translateX(0);
   }
-  .chest-base-panel.front { width: 240px; height: 80px; margin-left: -120px; margin-top: -40px; transform: translateZ(60px); }
-  .chest-base-panel.back { width: 240px; height: 80px; margin-left: -120px; margin-top: -40px; transform: rotateY(180deg) translateZ(60px); }
-  .chest-base-panel.left { width: 120px; height: 80px; margin-left: -60px; margin-top: -40px; transform: rotateY(-90deg) translateZ(120px); }
-  .chest-base-panel.right { width: 120px; height: 80px; margin-left: -60px; margin-top: -40px; transform: rotateY(90deg) translateZ(120px); }
-  .chest-base-panel.bottom { width: 240px; height: 120px; margin-left: -120px; margin-top: -60px; transform: rotateX(-90deg) translateZ(40px); }
+
+  .cyber-chest.is-open .chest-panel.front {
+    transform: translateZ(60px) translateX(200px);
+  }
+
+  .chest-panel.interior {
+    width: 232px;
+    height: 102px;
+    margin-left: -116px;
+    margin-top: -51px;
+    transform: translateZ(54px);
+  }
+
+  .chest-panel.back { width: 240px; height: 110px; margin-left: -120px; margin-top: -55px; transform: rotateY(180deg) translateZ(60px); }
+  .chest-panel.left { width: 120px; height: 110px; margin-left: -60px; margin-top: -55px; transform: rotateY(-90deg) translateZ(120px); }
+  .chest-panel.right { width: 120px; height: 110px; margin-left: -60px; margin-top: -55px; transform: rotateY(90deg) translateZ(120px); }
+  .chest-panel.top { width: 240px; height: 120px; margin-left: -120px; margin-top: -60px; transform: rotateX(90deg) translateZ(55px); }
+  .chest-panel.bottom { width: 240px; height: 120px; margin-left: -120px; margin-top: -60px; transform: rotateX(-90deg) translateZ(55px); }
 
   .chest-latch {
     width: 16px;
-    height: 30px;
-    bottom: -15px;
+    height: 34px;
+    top: 38px;
+    left: 112px;
   }
 
   .inspector-body {

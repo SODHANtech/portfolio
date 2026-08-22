@@ -89,26 +89,19 @@ export default function Certifications() {
                 <div className="chest-wrapper">
                   <div className="cyber-chest-outer" onClick={() => setChestOpen(true)}>
                     <div className="cyber-chest">
-                      {/* 3D lid panels */}
-                      <div className="chest-lid">
-                        <div className="chest-lid-panel front">
-                          <div className="chest-latch">
-                            <span className="latch-led"></span>
-                          </div>
+                      {/* 3D sliding front panel */}
+                      <div className="chest-panel front">
+                        <div className="chest-latch">
+                          <span className="latch-led"></span>
                         </div>
-                        <div className="chest-lid-panel back"></div>
-                        <div className="chest-lid-panel top"></div>
-                        <div className="chest-lid-panel left"></div>
-                        <div className="chest-lid-panel right"></div>
                       </div>
-                      {/* 3D base panels */}
-                      <div className="chest-base">
-                        <div className="chest-base-panel front"></div>
-                        <div className="chest-base-panel back"></div>
-                        <div className="chest-base-panel left"></div>
-                        <div className="chest-base-panel right"></div>
-                        <div className="chest-base-panel bottom"></div>
-                      </div>
+                      {/* 3D static panels */}
+                      <div className="chest-panel interior"></div>
+                      <div className="chest-panel back"></div>
+                      <div className="chest-panel top"></div>
+                      <div className="chest-panel bottom"></div>
+                      <div className="chest-panel left"></div>
+                      <div className="chest-panel right"></div>
                     </div>
                   </div>
                   <div className="chest-telemetry">
@@ -126,24 +119,19 @@ export default function Certifications() {
                 <div className="chest-column">
                   <div className="cyber-chest-outer is-open" onClick={() => { setChestOpen(false); setSelectedCert(null); }}>
                     <div className="cyber-chest is-open">
-                      <div className="chest-lid">
-                        <div className="chest-lid-panel front">
-                          <div className="chest-latch active">
-                            <span className="latch-led active"></span>
-                          </div>
+                      {/* 3D sliding front panel */}
+                      <div className="chest-panel front">
+                        <div className="chest-latch active">
+                          <span className="latch-led active"></span>
                         </div>
-                        <div className="chest-lid-panel back"></div>
-                        <div className="chest-lid-panel top"></div>
-                        <div className="chest-lid-panel left"></div>
-                        <div className="chest-lid-panel right"></div>
                       </div>
-                      <div className="chest-base">
-                        <div className="chest-base-panel front"></div>
-                        <div className="chest-base-panel back"></div>
-                        <div className="chest-base-panel left"></div>
-                        <div className="chest-base-panel right"></div>
-                        <div className="chest-base-panel bottom"></div>
-                      </div>
+                      {/* 3D static panels */}
+                      <div className="chest-panel interior"></div>
+                      <div className="chest-panel back"></div>
+                      <div className="chest-panel top"></div>
+                      <div className="chest-panel bottom"></div>
+                      <div className="chest-panel left"></div>
+                      <div className="chest-panel right"></div>
                     </div>
                   </div>
                   <div className="chest-telemetry">
