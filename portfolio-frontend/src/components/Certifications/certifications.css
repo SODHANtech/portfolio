@@ -250,14 +250,14 @@
   top: 10px;
   left: 0;
   transform-style: preserve-3d;
-  transform-origin: center bottom -80px; /* CRITICAL FIX: vertical bottom, Z-offset depth/2 */
+  transform-origin: 50% 100% -80px; /* CRITICAL FIX: exact back bottom edge coordinates */
   transition: transform 0.8s cubic-bezier(0.19, 1, 0.22, 1);
   z-index: 2;
 }
 
 /* Lid rotation backward when open */
 .cyber-chest.is-open .chest-lid {
-  transform: rotateX(-95deg) translateY(-10px) translateZ(10px);
+  transform: rotateX(-115deg);
 }
 
 .chest-lid-panel {
@@ -674,7 +674,7 @@
     width: 240px;
     height: 30px;
     top: 10px;
-    transform-origin: center bottom -60px; /* Pivots around depth/2 */
+    transform-origin: 50% 100% -60px; /* Pivots around depth/2 */
   }
   
   .chest-lid-panel.front { width: 240px; height: 30px; margin-left: -120px; margin-top: -15px; transform: translateZ(60px); }
