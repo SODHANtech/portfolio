@@ -24,8 +24,12 @@ const Message = require("./models/Message");
 
 const app = express();
 
-// Apply security headers
-app.use(helmet());
+// Apply security headers (configured to allow cross-origin assets like streamed images)
+app.use(
+  helmet({
+    crossOriginResourcePolicy: { policy: "cross-origin" },
+  })
+);
 
 // Restrict CORS origins
 const allowedOrigins = process.env.ALLOWED_ORIGINS
@@ -191,28 +195,39 @@ const upload = multer({
 
 // GET profile image read stream
 app.get("/api/profile/image", async (req, res) => {
+  console.log("[IMAGE_ROUTE]: Request received for profile image.");
   try {
     const profile = await Profile.findOne();
+    console.log("[IMAGE_ROUTE]: Profile fetched from DB:", !!profile);
     if (!profile || !profile.profileImage || !profile.profileImage.fileId) {
+      console.log("[IMAGE_ROUTE]: Profile image metadata missing.");
       return res.status(404).json({ message: "Profile image not found." });
     }
 
-    if (!gridFSBucket) {
-      return res.status(500).json({ message: "Database storage engine is initializing. Please try again." });
+    if (!mongoose.connection.db) {
+      console.log("[IMAGE_ROUTE]: mongoose.connection.db is not ready.");
+      return res.status(500).json({ message: "Database connection not ready." });
     }
 
+    const bucket = new mongoose.mongo.GridFSBucket(mongoose.connection.db, {
+      bucketName: "profileImages",
+    });
+
+    console.log("[IMAGE_ROUTE]: Preparing download stream for fileId:", profile.profileImage.fileId);
     res.set("Content-Type", profile.profileImage.contentType);
-    const downloadStream = gridFSBucket.openDownloadStream(
+    const downloadStream = bucket.openDownloadStream(
       new mongoose.Types.ObjectId(profile.profileImage.fileId)
     );
 
     downloadStream.on("error", (err) => {
-      console.error("Stream download error:", err.message);
+      console.error("[IMAGE_ROUTE]: Stream download error:", err.message);
       res.status(404).json({ message: "Image stream failed." });
     });
 
+    console.log("[IMAGE_ROUTE]: Piping download stream to response.");
     downloadStream.pipe(res);
   } catch (error) {
+    console.error("[IMAGE_ROUTE]: Error in image download route:", error.message);
     res.status(500).json({ message: "Failed to download image.", error: error.message });
   }
 });
