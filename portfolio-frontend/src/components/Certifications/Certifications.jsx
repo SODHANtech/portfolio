@@ -98,7 +98,6 @@ export default function Certifications() {
                         </div>
                         <div className="chest-lid-panel back"></div>
                         <div className="chest-lid-panel top"></div>
-                        <div className="chest-lid-panel bottom"></div>
                         <div className="chest-lid-panel left"></div>
                         <div className="chest-lid-panel right"></div>
                       </div>
@@ -135,7 +134,6 @@ export default function Certifications() {
                         </div>
                         <div className="chest-lid-panel back"></div>
                         <div className="chest-lid-panel top"></div>
-                        <div className="chest-lid-panel bottom"></div>
                         <div className="chest-lid-panel left"></div>
                         <div className="chest-lid-panel right"></div>
                       </div>
