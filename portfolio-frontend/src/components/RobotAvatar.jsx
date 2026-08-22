@@ -36,7 +36,7 @@ export default function RobotAvatar() {
     if (!container) return;
 
     let scene, camera, renderer, animationFrameId;
-    let robotHead, robotBody, robotVisor, robotCore;
+    let robotHead, robotBody, robotCore, robotHalo, reactorRing, sparkParticles;
 
     let mouseX = 0;
     let mouseY = 0;
@@ -92,54 +92,179 @@ export default function RobotAvatar() {
         color: 0x8b5cf6,
       });
 
-      // Body (Chest)
-      const bodyGeo = new THREE.CylinderGeometry(0.8, 0.6, 1.6, 16);
-      robotBody = new THREE.Mesh(bodyGeo, metalMaterial);
+      // Body (Segmented Torso Chassis)
+      robotBody = new THREE.Group();
       robotBody.position.y = -0.5;
-      robotGroup.add(robotBody);
 
-      // Reactor core on chest
-      const coreGeo = new THREE.SphereGeometry(0.25, 16, 16);
+      // 1. Central Core chassis (metallic cylinder)
+      const bodyGeo = new THREE.CylinderGeometry(0.5, 0.35, 1.3, 16);
+      const centralBody = new THREE.Mesh(bodyGeo, metalMaterial);
+      robotBody.add(centralBody);
+
+      // 2. Segmented Front Chest Armor Plate
+      const chestPlateGeo = new THREE.BoxGeometry(0.7, 0.8, 0.25);
+      const chestPlate = new THREE.Mesh(chestPlateGeo, metalMaterial);
+      chestPlate.position.set(0, 0.15, 0.25);
+      robotBody.add(chestPlate);
+
+      // 3. Reactor core on chest
+      const coreGeo = new THREE.SphereGeometry(0.18, 16, 16);
       robotCore = new THREE.Mesh(coreGeo, purpleGlowMaterial);
-      robotCore.position.set(0, 0.1, 0.65);
+      robotCore.position.set(0, 0.2, 0.38);
       robotBody.add(robotCore);
 
-      // Neck
-      const neckGeo = new THREE.CylinderGeometry(0.2, 0.2, 0.3, 16);
+      // 4. Glowing Reactor Orbital Torus Ring
+      const ringGeo = new THREE.TorusGeometry(0.26, 0.03, 8, 32);
+      const ringMaterial = new THREE.MeshBasicMaterial({
+        color: 0x06b6d4,
+        wireframe: true,
+      });
+      reactorRing = new THREE.Mesh(ringGeo, ringMaterial);
+      reactorRing.position.set(0, 0.2, 0.38);
+      robotBody.add(reactorRing);
+
+      // 5. Shoulder Joints & armor shields
+      const shoulderGeo = new THREE.SphereGeometry(0.15, 16, 16);
+      const leftShoulder = new THREE.Mesh(shoulderGeo, metalMaterial);
+      leftShoulder.position.set(-0.7, 0.3, 0);
+      robotBody.add(leftShoulder);
+
+      const rightShoulder = leftShoulder.clone();
+      rightShoulder.position.x = 0.7;
+      robotBody.add(rightShoulder);
+
+      const shieldGeo = new THREE.CylinderGeometry(0.2, 0.25, 0.12, 16, 1, false, 0, Math.PI);
+      const leftShield = new THREE.Mesh(shieldGeo, metalMaterial);
+      leftShield.rotation.x = Math.PI / 2;
+      leftShield.rotation.z = -Math.PI / 2;
+      leftShield.position.set(-0.7, 0.42, 0);
+      robotBody.add(leftShield);
+
+      const rightShield = leftShield.clone();
+      rightShield.rotation.z = Math.PI / 2;
+      rightShield.position.x = 0.7;
+      robotBody.add(rightShield);
+
+      robotGroup.add(robotBody);
+
+      // Neck (connecting body to head)
+      const neckGeo = new THREE.CylinderGeometry(0.15, 0.15, 0.3, 16);
       const robotNeck = new THREE.Mesh(neckGeo, metalMaterial);
-      robotNeck.position.y = 0.45;
+      robotNeck.position.y = 0.35;
       robotGroup.add(robotNeck);
 
       // Head Group (for rotation)
       robotHead = new THREE.Group();
-      robotHead.position.y = 0.8;
+      robotHead.position.y = 0.75;
 
-      // Head Mesh
-      const headGeo = new THREE.BoxGeometry(0.9, 0.7, 0.8);
+      // Head Mesh (Box with segmented cyan temple panels)
+      const headGeo = new THREE.BoxGeometry(0.8, 0.65, 0.7);
       const headMesh = new THREE.Mesh(headGeo, metalMaterial);
       robotHead.add(headMesh);
 
-      // Visor/Eyes
-      const visorGeo = new THREE.BoxGeometry(0.7, 0.15, 0.1);
-      robotVisor = new THREE.Mesh(visorGeo, cyanGlowMaterial);
-      robotVisor.position.set(0, 0.05, 0.41);
-      robotHead.add(robotVisor);
+      // Cybernetic Head Side-Panels (Mechanical Segmentation)
+      const sidePanelGeo = new THREE.BoxGeometry(0.08, 0.45, 0.55);
+      const leftPanel = new THREE.Mesh(sidePanelGeo, metalMaterial);
+      leftPanel.position.set(-0.42, 0, 0);
+      robotHead.add(leftPanel);
 
-      // Ears/Antennas
-      const earGeo = new THREE.CylinderGeometry(0.08, 0.08, 0.2, 8);
-      const leftEar = new THREE.Mesh(earGeo, metalMaterial);
-      leftEar.rotation.z = Math.PI / 2;
-      leftEar.position.set(-0.5, 0, 0);
-      robotHead.add(leftEar);
+      const rightPanel = leftPanel.clone();
+      rightPanel.position.x = 0.42;
+      robotHead.add(rightPanel);
 
-      const rightEar = leftEar.clone();
-      rightEar.position.x = 0.5;
-      robotHead.add(rightEar);
+      // Dual-segment futuristic visors/lens
+      const visorGeo = new THREE.BoxGeometry(0.3, 0.14, 0.08);
+      
+      const leftVisor = new THREE.Mesh(visorGeo, cyanGlowMaterial);
+      leftVisor.position.set(-0.16, 0.03, 0.36);
+      robotHead.add(leftVisor);
+
+      const rightVisor = new THREE.Mesh(visorGeo, cyanGlowMaterial);
+      rightVisor.position.set(0.16, 0.03, 0.36);
+      robotHead.add(rightVisor);
+
+      // Stepped Cybernetic Antenna structures
+      const antBaseGeo = new THREE.CylinderGeometry(0.06, 0.06, 0.08, 8);
+      const antRodGeo = new THREE.CylinderGeometry(0.015, 0.015, 0.35, 8);
+      const antTipGeo = new THREE.SphereGeometry(0.04, 8, 8);
+
+      const antGroupLeft = new THREE.Group();
+      const antBaseLeft = new THREE.Mesh(antBaseGeo, metalMaterial);
+      antBaseLeft.rotation.z = Math.PI / 2;
+      antGroupLeft.add(antBaseLeft);
+
+      const antRodLeft = new THREE.Mesh(antRodGeo, metalMaterial);
+      antRodLeft.position.set(-0.2, 0.18, 0);
+      antRodLeft.rotation.z = -Math.PI / 6;
+      antGroupLeft.add(antRodLeft);
+
+      const antTipLeft = new THREE.Mesh(antTipGeo, cyanGlowMaterial);
+      antTipLeft.position.set(-0.28, 0.33, 0);
+      antGroupLeft.add(antTipLeft);
+
+      antGroupLeft.position.set(-0.42, 0.1, 0);
+      robotHead.add(antGroupLeft);
+
+      const antGroupRight = new THREE.Group();
+      const antBaseRight = new THREE.Mesh(antBaseGeo, metalMaterial);
+      antBaseRight.rotation.z = -Math.PI / 2;
+      antGroupRight.add(antBaseRight);
+
+      const antRodRight = new THREE.Mesh(antRodGeo, metalMaterial);
+      antRodRight.position.set(0.2, 0.18, 0);
+      antRodRight.rotation.z = Math.PI / 6;
+      antGroupRight.add(antRodRight);
+
+      const antTipRight = new THREE.Mesh(antTipGeo, cyanGlowMaterial);
+      antTipRight.position.set(0.28, 0.33, 0);
+      antGroupRight.add(antTipRight);
+
+      antGroupRight.position.set(0.42, 0.1, 0);
+      robotHead.add(antGroupRight);
 
       robotGroup.add(robotHead);
-      scene.add(robotGroup);
 
+      // Cybernetic Floating Halo Ring behind/around robot's head
+      const haloGeo = new THREE.TorusGeometry(0.95, 0.012, 8, 48);
+      const haloMaterial = new THREE.MeshBasicMaterial({
+        color: 0x06b6d4,
+        wireframe: true,
+        transparent: true,
+        opacity: 0.24,
+      });
+      robotHalo = new THREE.Mesh(haloGeo, haloMaterial);
+      robotHalo.position.set(0, 0.75, -0.3);
+      robotHalo.rotation.x = Math.PI / 6;
+      robotGroup.add(robotHalo);
+
+      scene.add(robotGroup);
       robotGroup.position.y = -0.2;
+
+      // Subtle Futuristic Base Projection Grid Platform
+      const gridHelper = new THREE.GridHelper(3.0, 10, 0x06b6d4, 0x06b6d4);
+      gridHelper.position.y = -1.45;
+      gridHelper.material.opacity = 0.1;
+      gridHelper.material.transparent = true;
+      scene.add(gridHelper);
+
+      // Slow Spark Particles Floating Around
+      const particleCount = 20;
+      const particlesGeo = new THREE.BufferGeometry();
+      const positions = new Float32Array(particleCount * 3);
+      for (let i = 0; i < particleCount * 3; i += 3) {
+        positions[i] = (Math.random() - 0.5) * 3.5;
+        positions[i + 1] = (Math.random() - 0.5) * 3.0 + 0.2;
+        positions[i + 2] = (Math.random() - 0.5) * 2.5;
+      }
+      particlesGeo.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+      const particleMat = new THREE.PointsMaterial({
+        color: 0x06b6d4,
+        size: 0.045,
+        transparent: true,
+        opacity: 0.55,
+      });
+      sparkParticles = new THREE.Points(particlesGeo, particleMat);
+      scene.add(sparkParticles);
 
       const clock = new THREE.Clock();
 
@@ -148,16 +273,46 @@ export default function RobotAvatar() {
 
         const elapsedTime = clock.getElapsedTime();
 
-        robotGroup.position.y = -0.2 + Math.sin(elapsedTime * 1.5) * 0.1;
+        // Subtle bobbing motion
+        robotGroup.position.y = -0.2 + Math.sin(elapsedTime * 1.3) * 0.08;
 
-        const pulse = 1.0 + Math.sin(elapsedTime * 4.0) * 0.2;
+        // Reactor pulsing scale
+        const pulse = 1.0 + Math.sin(elapsedTime * 3.0) * 0.15;
         robotCore.scale.set(pulse, pulse, pulse);
+
+        // Reactor ring rotating
+        if (reactorRing) {
+          reactorRing.rotation.z = elapsedTime * 1.2;
+        }
+
+        // Halo rotating
+        if (robotHalo) {
+          robotHalo.rotation.z = -elapsedTime * 0.35;
+          robotHalo.rotation.y = Math.sin(elapsedTime * 0.5) * 0.1;
+        }
+
+        // Stepped antenna tips pulse intensity
+        const emissivePulse = 0.55 + Math.sin(elapsedTime * 3.0) * 0.25;
+        if (antTipLeft && antTipLeft.material) antTipLeft.material.opacity = emissivePulse;
+        if (antTipRight && antTipRight.material) antTipRight.material.opacity = emissivePulse;
+
+        // Slow particles movement drift upwards
+        if (sparkParticles) {
+          const pos = sparkParticles.geometry.attributes.position.array;
+          for (let i = 1; i < pos.length; i += 3) {
+            pos[i] += 0.0035; // float upwards slowly
+            if (pos[i] > 1.8) {
+              pos[i] = -1.8; // reset to bottom
+            }
+          }
+          sparkParticles.geometry.attributes.position.needsUpdate = true;
+        }
 
         targetX += (mouseX - targetX) * 0.08;
         targetY += (mouseY - targetY) * 0.08;
 
         if (robotHead) {
-          robotHead.rotation.y = targetX * 0.5;
+          robotHead.rotation.y = targetX * 0.55;
           robotHead.rotation.x = -targetY * 0.3;
         }
 

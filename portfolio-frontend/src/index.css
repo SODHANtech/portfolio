@@ -1781,6 +1781,50 @@ footer {
   flex-direction: column;
 }
 
+.about-card-label {
+  display: inline-block;
+  font-family: monospace;
+  font-size: 0.65rem;
+  color: var(--hud-cyan);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  border: 1px solid rgba(6, 182, 212, 0.2);
+  background: rgba(6, 182, 212, 0.05);
+  padding: 3px 8px;
+  border-radius: 4px;
+  margin-bottom: 24px;
+  align-self: flex-start;
+}
+
+.about-main-card .hud-panel-content h3 {
+  font-size: 1.8rem;
+  font-weight: 800;
+  line-height: 1.35;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  margin-bottom: 24px;
+  text-align: left;
+}
+
+.about-main-card .hud-panel-content h3 span {
+  background: linear-gradient(90deg, #38bdf8, #60a5fa);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.about-main-card .hud-panel-content p {
+  font-size: 0.95rem;
+  line-height: 1.75;
+  color: var(--text-muted);
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.about-main-card .hud-panel-content p:last-child {
+  margin-bottom: 0;
+}
+
 .hud-panel-content {
   padding: 30px;
   flex-grow: 1;
