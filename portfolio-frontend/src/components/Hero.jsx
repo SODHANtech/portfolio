@@ -1,4 +1,4 @@
-export default function Hero({ profile, projectsCount, certsCount, apiLatency }) {
+export default function Hero({ profile, projectsCount, certsCount: _certsCount, apiLatency }) {
   const name = profile?.name || "Sodhan Krishna Sai";
   const headline = profile?.headline || "FULL-STACK DEVELOPER";
   const description = profile?.description || "I build modern, responsive web applications using React, Node.js, Express, and MongoDB.";
@@ -15,7 +15,7 @@ export default function Hero({ profile, projectsCount, certsCount, apiLatency })
         <div className="hero-content left-align">
           <div className="hero-badge">
             <span className="status-dot"></span>
-            SYS_STATUS: ACTIVE_FOR_OPPORTUNITIES
+            SYSTEM STATUS — AVAILABLE FOR OPPORTUNITIES
           </div>
 
           <p className="hero-small">
@@ -51,42 +51,30 @@ export default function Hero({ profile, projectsCount, certsCount, apiLatency })
         </div>
 
         {/* Right Side: Tactical Telemetry HUD */}
-        <div className="hero-telemetry-hud hud-panel">
+        <div className="hero-telemetry-hud hud-panel compact-hud">
           <div className="hud-panel-header">
-            <span>SYSTEM_TELEMETRY_LOG</span>
-            <span className="glow-cyan">REAL_TIME</span>
+            <span>SYSTEM TELEMETRY</span>
+            <span className="glow-green">ONLINE</span>
           </div>
-          <div className="hud-panel-content telemetry-grid">
-            <div className="telemetry-item">
-              <span className="tel-label">SECURE_LINK</span>
-              <span className="tel-value glow-green">ONLINE</span>
-            </div>
-            <div className="telemetry-item">
-              <span className="tel-label">MEASURED_LATENCY</span>
+          <div className="hud-panel-content telemetry-list-compact">
+            <div className="telemetry-row">
+              <span className="tel-label">API LATENCY</span>
               <span className="tel-value glow-cyan">
                 {apiLatency !== null ? `${apiLatency} MS` : "MEASURING..."}
               </span>
             </div>
-            <div className="telemetry-item">
-              <span className="tel-label">DATABASE_NODE</span>
-              <span className="tel-value">MONGO_ATLAS</span>
-            </div>
-            <div className="telemetry-item">
-              <span className="tel-label">DEPLOYED_MODULES</span>
+            <div className="telemetry-row">
+              <span className="tel-label">PROJECTS</span>
               <span className="tel-value glow-cyan">{projectsCount} ACTIVE</span>
             </div>
-            <div className="telemetry-item">
-              <span className="tel-label">VAULT_CREDENTIALS</span>
-              <span className="tel-value">{certsCount} VAULTED</span>
+            <div className="telemetry-row">
+              <span className="tel-label">DATABASE</span>
+              <span className="tel-value">MONGODB ATLAS</span>
             </div>
-            <div className="telemetry-item">
-              <span className="tel-label">SYS_INDEX_STATUS</span>
-              <span className="tel-value glow-green">SECURE</span>
-            </div>
-            <div className="telemetry-item full-width">
-              <span className="tel-label">SYSTEM_STACK_CORE</span>
-              <span className="tel-value font-mono" style={{ fontSize: "0.82rem" }}>
-                React | Node.js | Python | Verilog
+            <div className="telemetry-row stack-row">
+              <span className="tel-label">STACK</span>
+              <span className="tel-value font-mono">
+                REACT • NODE • PYTHON • VERILOG
               </span>
             </div>
           </div>
@@ -94,8 +82,8 @@ export default function Hero({ profile, projectsCount, certsCount, apiLatency })
       </div>
 
       <div className="hero-scroll">
-        <span></span>
-        Scroll to explore
+        <span className="scroll-arrow">↓</span>
+        <span className="scroll-text">SCROLL TO EXPLORE</span>
       </div>
     </section>
   );
