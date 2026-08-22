@@ -5,6 +5,10 @@ const helmet = require("helmet");
 const rateLimit = require("express-rate-limit");
 require("dotenv").config();
 const nodemailer = require("nodemailer");
+const multer = require("multer");
+const { Readable } = require("stream");
+
+let gridFSBucket;
 
 if (!process.env.MONGO_URI) {
   console.error("FATAL ERROR: MONGO_URI is not defined in the environment or .env file.");
@@ -168,6 +172,106 @@ app.post("/api/profile", requireAdmin, async (req, res) => {
       message: "Failed to save profile",
       error: error.message,
     });
+  }
+});
+
+// Configure memory storage for image uploading
+const storage = multer.memoryStorage();
+const upload = multer({
+  storage,
+  limits: { fileSize: 2 * 1024 * 1024 }, // 2MB limit
+  fileFilter: (req, file, cb) => {
+    const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
+    if (!allowedTypes.includes(file.mimetype)) {
+      return cb(new Error("Only JPEG, PNG and WEBP images are allowed."));
+    }
+    cb(null, true);
+  },
+});
+
+// GET profile image read stream
+app.get("/api/profile/image", async (req, res) => {
+  try {
+    const profile = await Profile.findOne();
+    if (!profile || !profile.profileImage || !profile.profileImage.fileId) {
+      return res.status(404).json({ message: "Profile image not found." });
+    }
+
+    if (!gridFSBucket) {
+      return res.status(500).json({ message: "Database storage engine is initializing. Please try again." });
+    }
+
+    res.set("Content-Type", profile.profileImage.contentType);
+    const downloadStream = gridFSBucket.openDownloadStream(
+      new mongoose.Types.ObjectId(profile.profileImage.fileId)
+    );
+
+    downloadStream.on("error", (err) => {
+      console.error("Stream download error:", err.message);
+      res.status(404).json({ message: "Image stream failed." });
+    });
+
+    downloadStream.pipe(res);
+  } catch (error) {
+    res.status(500).json({ message: "Failed to download image.", error: error.message });
+  }
+});
+
+// POST profile image upload (Admin protected)
+app.post("/api/profile/image", requireAdmin, upload.single("image"), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ message: "No image file provided." });
+    }
+
+    if (!gridFSBucket) {
+      return res.status(500).json({ message: "Database storage engine is initializing. Please try again." });
+    }
+
+    const profile = await Profile.findOne();
+    if (!profile) {
+      return res.status(404).json({ message: "Profile must exist before adding an image." });
+    }
+
+    const readableStream = new Readable();
+    readableStream.push(req.file.buffer);
+    readableStream.push(null);
+
+    const uploadStream = gridFSBucket.openUploadStream(req.file.originalname, {
+      contentType: req.file.mimetype,
+    });
+
+    readableStream.pipe(uploadStream);
+
+    uploadStream.on("error", (err) => {
+      console.error("Upload stream error:", err.message);
+      res.status(500).json({ message: "Failed to upload image to storage grid." });
+    });
+
+    uploadStream.on("finish", async () => {
+      // If a previous image exists, delete it to prevent orphaned files
+      if (profile.profileImage && profile.profileImage.fileId) {
+        try {
+          await gridFSBucket.delete(new mongoose.Types.ObjectId(profile.profileImage.fileId));
+        } catch (err) {
+          console.error("Failed to delete old profile image from GridFS:", err.message);
+        }
+      }
+
+      profile.profileImage = {
+        fileId: uploadStream.id,
+        contentType: req.file.mimetype,
+        filename: req.file.originalname,
+      };
+
+      await profile.save();
+      res.status(200).json({
+        message: "Profile image uploaded and updated successfully.",
+        profileImage: profile.profileImage,
+      });
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Failed to upload profile image", error: error.message });
   }
 });
 
@@ -401,6 +505,10 @@ mongoose
   .connect(process.env.MONGO_URI)
   .then(() => {
     console.log("MongoDB connected");
+
+    gridFSBucket = new mongoose.mongo.GridFSBucket(mongoose.connection.db, {
+      bucketName: "profileImages",
+    });
 
     app.listen(PORT, () => {
       console.log(`Server running on http://localhost:${PORT}`);

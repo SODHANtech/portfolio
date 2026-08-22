@@ -2039,6 +2039,68 @@ footer {
   transform: translateY(-1px);
 }
 
+.hero-right-column {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 24px;
+  width: 100%;
+}
+
+.profile-photo-holder {
+  width: 220px;
+  height: 220px;
+  min-height: auto !important;
+  display: flex;
+  flex-direction: column;
+  margin-right: 70px; /* Centered relative to the 360px wide telemetry panel */
+}
+
+.photo-frame {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(8, 12, 28, 0.4);
+  overflow: hidden;
+  padding: 10px;
+}
+
+.profile-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border: 1px solid rgba(6, 182, 212, 0.2);
+  border-radius: var(--radius-sm);
+  box-shadow: 0 0 15px rgba(6, 182, 212, 0.08);
+  transition: all var(--transition);
+}
+
+.profile-photo:hover {
+  border-color: var(--hud-cyan);
+  box-shadow: 0 0 20px rgba(6, 182, 212, 0.25);
+  transform: scale(1.02);
+}
+
+.photo-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  font-family: monospace;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  letter-spacing: 0.1em;
+}
+
+.photo-placeholder .placeholder-title {
+  font-weight: bold;
+}
+
+.photo-placeholder .placeholder-sub {
+  font-size: 0.65rem;
+}
+
 /* Compact Telemetry panel adjustments */
 .compact-hud {
   min-height: auto !important;
@@ -2150,6 +2212,16 @@ footer {
 
   .hero-br {
     display: none;
+  }
+
+  .hero-right-column {
+    align-items: center;
+  }
+
+  .profile-photo-holder {
+    margin-right: 0;
+    width: 200px;
+    height: 200px;
   }
 
   .compact-hud {

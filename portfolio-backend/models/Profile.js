@@ -68,6 +68,11 @@ const profileSchema = new mongoose.Schema(
       type: [String],
       default: [],
     },
+    profileImage: {
+      fileId: mongoose.Schema.Types.ObjectId,
+      contentType: String,
+      filename: String,
+    },
   },
   {
     timestamps: true,

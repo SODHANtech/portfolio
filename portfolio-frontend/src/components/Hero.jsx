@@ -4,6 +4,10 @@ export default function Hero({ profile, projectsCount, certsCount: _certsCount, 
   const description = profile?.description || "I build modern, responsive web applications using React, Node.js, Express, and MongoDB.";
   const techHighlights = profile?.techHighlights || ["React", "Node.js", "Express", "MongoDB", "Python", "Verilog"];
 
+  const profileImageUrl = profile?.profileImage?.fileId
+    ? "http://localhost:5000/api/profile/image"
+    : null;
+
   return (
     <section id="home" className="hero">
       <div className="hero-glow hero-glow-one"></div>
@@ -50,32 +54,57 @@ export default function Hero({ profile, projectsCount, certsCount: _certsCount, 
           </div>
         </div>
 
-        {/* Right Side: Tactical Telemetry HUD */}
-        <div className="hero-telemetry-hud hud-panel compact-hud">
-          <div className="hud-panel-header">
-            <span>SYSTEM TELEMETRY</span>
-            <span className="glow-green">ONLINE</span>
+        {/* Right Side: Identity Photo & Tactical Telemetry HUD */}
+        <div className="hero-right-column">
+          <div className="profile-photo-holder hud-panel">
+            <div className="hud-panel-header">
+              <span>IDENTITY_MODULE</span>
+              <span className={profileImageUrl ? "glow-cyan" : "glow-yellow"}>
+                {profileImageUrl ? "ACTIVE" : "AWAITING_UPLOAD"}
+              </span>
+            </div>
+            <div className="hud-panel-content photo-frame">
+              {profileImageUrl ? (
+                <img
+                  src={profileImageUrl}
+                  alt={name}
+                  className="profile-photo"
+                />
+              ) : (
+                <div className="photo-placeholder">
+                  <span className="placeholder-title">IDENTITY_IMAGE</span>
+                  <span className="placeholder-sub glow-yellow">AWAITING_UPLOAD</span>
+                </div>
+              )}
+            </div>
           </div>
-          <div className="hud-panel-content telemetry-list-compact">
-            <div className="telemetry-row">
-              <span className="tel-label">API LATENCY</span>
-              <span className="tel-value glow-cyan">
-                {apiLatency !== null ? `${apiLatency} MS` : "MEASURING..."}
-              </span>
+
+          <div className="hero-telemetry-hud hud-panel compact-hud">
+            <div className="hud-panel-header">
+              <span>SYSTEM TELEMETRY</span>
+              <span className="glow-green">ONLINE</span>
             </div>
-            <div className="telemetry-row">
-              <span className="tel-label">PROJECTS</span>
-              <span className="tel-value glow-cyan">{projectsCount} ACTIVE</span>
-            </div>
-            <div className="telemetry-row">
-              <span className="tel-label">DATABASE</span>
-              <span className="tel-value">MONGODB ATLAS</span>
-            </div>
-            <div className="telemetry-row stack-row">
-              <span className="tel-label">STACK</span>
-              <span className="tel-value font-mono">
-                REACT • NODE • PYTHON • VERILOG
-              </span>
+            <div className="hud-panel-content telemetry-list-compact">
+              <div className="telemetry-row">
+                <span className="tel-label">API LATENCY</span>
+                <span className="tel-value glow-cyan">
+                  {apiLatency !== null ? `${apiLatency} MS` : "MEASURING..."}
+                </span>
+              </div>
+              <div className="telemetry-row">
+                <span className="tel-label">PROJECTS</span>
+                <span className="tel-value glow-cyan">{projectsCount} ACTIVE</span>
+              </div>
+              <div className="telemetry-row">
+                <span className="tel-label">DATABASE</span>
+                <span className="tel-value">MONGODB ATLAS</span>
+              </div>
+              <div className="telemetry-row stack-row">
+                <span className="tel-label">STACK</span>
+                <span className="tel-value font-mono">
+                  REACT • NODE • PYTHON • VERILOG
+                </span>
+              </div>
             </div>
           </div>
         </div>
