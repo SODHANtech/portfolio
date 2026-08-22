@@ -91,7 +91,11 @@ export default function Certifications() {
                     <div className="cyber-chest">
                       {/* 3D lid panels */}
                       <div className="chest-lid">
-                        <div className="chest-lid-panel front"></div>
+                        <div className="chest-lid-panel front">
+                          <div className="chest-latch">
+                            <span className="latch-led"></span>
+                          </div>
+                        </div>
                         <div className="chest-lid-panel back"></div>
                         <div className="chest-lid-panel top"></div>
                         <div className="chest-lid-panel bottom"></div>
@@ -100,11 +104,7 @@ export default function Certifications() {
                       </div>
                       {/* 3D base panels */}
                       <div className="chest-base">
-                        <div className="chest-base-panel front">
-                          <div className="chest-lock-core">
-                            <span className="lock-led"></span>
-                          </div>
-                        </div>
+                        <div className="chest-base-panel front"></div>
                         <div className="chest-base-panel back"></div>
                         <div className="chest-base-panel left"></div>
                         <div className="chest-base-panel right"></div>
@@ -128,7 +128,11 @@ export default function Certifications() {
                   <div className="cyber-chest-outer is-open" onClick={() => { setChestOpen(false); setSelectedCert(null); }}>
                     <div className="cyber-chest is-open">
                       <div className="chest-lid">
-                        <div className="chest-lid-panel front"></div>
+                        <div className="chest-lid-panel front">
+                          <div className="chest-latch active">
+                            <span className="latch-led active"></span>
+                          </div>
+                        </div>
                         <div className="chest-lid-panel back"></div>
                         <div className="chest-lid-panel top"></div>
                         <div className="chest-lid-panel bottom"></div>
@@ -136,11 +140,7 @@ export default function Certifications() {
                         <div className="chest-lid-panel right"></div>
                       </div>
                       <div className="chest-base">
-                        <div className="chest-base-panel front">
-                          <div className="chest-lock-core active">
-                            <span className="lock-led active"></span>
-                          </div>
-                        </div>
+                        <div className="chest-base-panel front"></div>
                         <div className="chest-base-panel back"></div>
                         <div className="chest-base-panel left"></div>
                         <div className="chest-base-panel right"></div>

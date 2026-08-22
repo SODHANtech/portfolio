@@ -242,139 +242,180 @@
   transform: rotateX(14deg) rotateY(-28deg);
 }
 
-/* 3D Lid Panel Structure */
+/* 3D Lid Panel Structure (Height: 40px, Width: 320px, Depth: 160px) */
 .chest-lid {
   width: 320px;
-  height: 50px;
+  height: 40px;
   position: absolute;
-  top: 0;
+  top: 10px;
+  left: 0;
   transform-style: preserve-3d;
-  transform-origin: center back -80px;
+  transform-origin: center bottom -80px; /* CRITICAL FIX: vertical bottom, Z-offset depth/2 */
   transition: transform 0.8s cubic-bezier(0.19, 1, 0.22, 1);
   z-index: 2;
 }
 
 /* Lid rotation backward when open */
 .cyber-chest.is-open .chest-lid {
-  transform: rotateX(-95deg) translateY(-15px) translateZ(10px);
+  transform: rotateX(-95deg) translateY(-10px) translateZ(10px);
 }
 
 .chest-lid-panel {
   position: absolute;
-  background: linear-gradient(135deg, #101b35 0%, #080d1a 100%);
-  border: 2px solid var(--hud-border-cyan);
-  box-shadow: inset 0 0 12px rgba(6, 182, 212, 0.35);
+  left: 50%;
+  top: 50%;
+  background: #251610; /* Warm dark brown wood color */
+  border: 4px solid #140d0a; /* Bold dark edges */
+  box-shadow: inset 0 0 10px rgba(6, 182, 212, 0.45); /* Cyber cyan seam glow */
+  box-sizing: border-box;
 }
 
 .chest-lid-panel.front {
   width: 320px;
-  height: 50px;
+  height: 40px;
+  margin-left: -160px;
+  margin-top: -20px;
   transform: translateZ(80px);
-  border-bottom: 1px solid rgba(6, 182, 212, 0.5);
 }
 
 .chest-lid-panel.back {
   width: 320px;
-  height: 50px;
+  height: 40px;
+  margin-left: -160px;
+  margin-top: -20px;
   transform: rotateY(180deg) translateZ(80px);
 }
 
 .chest-lid-panel.top {
   width: 320px;
   height: 160px;
-  transform: rotateX(90deg) translateZ(80px);
-  /* Tech detail beveled panels style */
+  margin-left: -160px;
+  margin-top: -80px;
+  transform: rotateX(90deg) translateZ(20px);
   background: 
     radial-gradient(circle at center, rgba(6, 182, 212, 0.15), transparent 70%),
-    linear-gradient(135deg, #101b35 0%, #080d1a 100%);
+    #251610;
+}
+
+.chest-lid-panel.bottom {
+  width: 320px;
+  height: 160px;
+  margin-left: -160px;
+  margin-top: -80px;
+  transform: rotateX(-90deg) translateZ(20px);
 }
 
 .chest-lid-panel.left {
   width: 160px;
-  height: 50px;
+  height: 40px;
+  margin-left: -80px;
+  margin-top: -20px;
   transform: rotateY(-90deg) translateZ(160px);
 }
 
 .chest-lid-panel.right {
   width: 160px;
-  height: 50px;
+  height: 40px;
+  margin-left: -80px;
+  margin-top: -20px;
   transform: rotateY(90deg) translateZ(160px);
 }
 
-/* 3D Base Panel Structure */
+/* 3D Base Panel Structure (Height: 100px, Width: 320px, Depth: 160px) */
 .chest-base {
   width: 320px;
   height: 100px;
   position: absolute;
   bottom: 0;
+  left: 0;
   transform-style: preserve-3d;
 }
 
 .chest-base-panel {
   position: absolute;
-  background: linear-gradient(135deg, #0b1224 0%, #050810 100%);
-  border: 2px solid var(--hud-border-cyan);
-  box-shadow: inset 0 0 15px rgba(6, 182, 212, 0.25);
+  left: 50%;
+  top: 50%;
+  background: #20130d; /* Slightly darker base wood color */
+  border: 4px solid #140d0a;
+  box-shadow: inset 0 0 10px rgba(6, 182, 212, 0.35);
+  box-sizing: border-box;
 }
 
 .chest-base-panel.front {
   width: 320px;
   height: 100px;
+  margin-left: -160px;
+  margin-top: -50px;
   transform: translateZ(80px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-top: 1px solid rgba(6, 182, 212, 0.5);
 }
 
 .chest-base-panel.back {
   width: 320px;
   height: 100px;
+  margin-left: -160px;
+  margin-top: -50px;
   transform: rotateY(180deg) translateZ(80px);
 }
 
 .chest-base-panel.left {
   width: 160px;
   height: 100px;
+  margin-left: -80px;
+  margin-top: -50px;
   transform: rotateY(-90deg) translateZ(160px);
 }
 
 .chest-base-panel.right {
   width: 160px;
   height: 100px;
+  margin-left: -80px;
+  margin-top: -50px;
   transform: rotateY(90deg) translateZ(160px);
 }
 
-/* Lock Core */
-.chest-lock-core {
-  width: 44px;
-  height: 44px;
-  background: #030712;
-  border: 2px solid rgba(139, 92, 246, 0.4);
-  box-shadow: 0 0 10px rgba(139, 92, 246, 0.2);
+.chest-base-panel.bottom {
+  width: 320px;
+  height: 160px;
+  margin-left: -160px;
+  margin-top: -80px;
+  transform: rotateX(-90deg) translateZ(50px);
+}
+
+/* Futuristic Minecraft Silver Lock Latch */
+.chest-latch {
+  width: 20px;
+  height: 38px;
+  background: #9ca3af; /* Silver color */
+  border: 3px solid #374151; /* Dark iron frame */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+  position: absolute;
+  bottom: -18px; /* Hangs down past the lid line */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 4px;
+  border-radius: 2px;
   transition: border-color 0.5s, box-shadow 0.5s;
 }
 
-.chest-lock-core.active {
+.chest-latch.active {
   border-color: var(--hud-cyan);
-  box-shadow: 0 0 15px rgba(6, 182, 212, 0.35);
+  box-shadow: 0 0 10px rgba(6, 182, 212, 0.5);
 }
 
-.lock-led {
-  width: 10px;
-  height: 10px;
-  background: #8b5cf6;
+.latch-led {
+  width: 6px;
+  height: 6px;
+  background: #8b5cf6; /* Sealed Purple indicator */
   border-radius: 50%;
-  box-shadow: 0 0 8px #8b5cf6;
+  box-shadow: 0 0 6px #8b5cf6;
   transition: background 0.5s, box-shadow 0.5s;
 }
 
-.lock-led.active {
-  background: var(--hud-cyan);
+.latch-led.active {
+  background: var(--hud-cyan); /* Active Cyan indicator */
   box-shadow: 0 0 10px var(--hud-cyan);
 }
 
@@ -626,25 +667,38 @@
 
 @media (max-width: 768px) {
   .cyber-chest {
-    width: 280px;
-    height: 130px;
+    width: 240px;
+    height: 120px;
   }
   .chest-lid {
-    width: 280px;
-    height: 40px;
-    transform-origin: center back -70px;
+    width: 240px;
+    height: 30px;
+    top: 10px;
+    transform-origin: center bottom -60px; /* Pivots around depth/2 */
   }
-  .chest-lid-panel.front { width: 280px; height: 40px; transform: translateZ(70px); }
-  .chest-lid-panel.back { width: 280px; height: 40px; transform: rotateY(180deg) translateZ(70px); }
-  .chest-lid-panel.top { width: 280px; height: 140px; transform: rotateX(90deg) translateZ(70px); }
-  .chest-lid-panel.left { width: 140px; height: 40px; transform: rotateY(-90deg) translateZ(140px); }
-  .chest-lid-panel.right { width: 140px; height: 40px; transform: rotateY(90deg) translateZ(140px); }
+  
+  .chest-lid-panel.front { width: 240px; height: 30px; margin-left: -120px; margin-top: -15px; transform: translateZ(60px); }
+  .chest-lid-panel.back { width: 240px; height: 30px; margin-left: -120px; margin-top: -15px; transform: rotateY(180deg) translateZ(60px); }
+  .chest-lid-panel.top { width: 240px; height: 120px; margin-left: -120px; margin-top: -60px; transform: rotateX(90deg) translateZ(15px); }
+  .chest-lid-panel.bottom { width: 240px; height: 120px; margin-left: -120px; margin-top: -60px; transform: rotateX(-90deg) translateZ(15px); }
+  .chest-lid-panel.left { width: 120px; height: 30px; margin-left: -60px; margin-top: -15px; transform: rotateY(-90deg) translateZ(120px); }
+  .chest-lid-panel.right { width: 120px; height: 30px; margin-left: -60px; margin-top: -15px; transform: rotateY(90deg) translateZ(120px); }
 
-  .chest-base { width: 280px; height: 90px; }
-  .chest-base-panel.front { width: 280px; height: 90px; transform: translateZ(70px); }
-  .chest-base-panel.back { width: 280px; height: 90px; transform: rotateY(180deg) translateZ(70px); }
-  .chest-base-panel.left { width: 140px; height: 90px; transform: rotateY(-90deg) translateZ(140px); }
-  .chest-base-panel.right { width: 140px; height: 90px; transform: rotateY(90deg) translateZ(140px); }
+  .chest-base {
+    width: 240px;
+    height: 80px;
+  }
+  .chest-base-panel.front { width: 240px; height: 80px; margin-left: -120px; margin-top: -40px; transform: translateZ(60px); }
+  .chest-base-panel.back { width: 240px; height: 80px; margin-left: -120px; margin-top: -40px; transform: rotateY(180deg) translateZ(60px); }
+  .chest-base-panel.left { width: 120px; height: 80px; margin-left: -60px; margin-top: -40px; transform: rotateY(-90deg) translateZ(120px); }
+  .chest-base-panel.right { width: 120px; height: 80px; margin-left: -60px; margin-top: -40px; transform: rotateY(90deg) translateZ(120px); }
+  .chest-base-panel.bottom { width: 240px; height: 120px; margin-left: -120px; margin-top: -60px; transform: rotateX(-90deg) translateZ(40px); }
+
+  .chest-latch {
+    width: 16px;
+    height: 30px;
+    bottom: -15px;
+  }
 
   .inspector-body {
     grid-template-columns: 1fr;
