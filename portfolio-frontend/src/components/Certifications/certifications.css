@@ -428,7 +428,7 @@
 .cert-chest-opened-layout {
   display: grid;
   grid-template-columns: 360px 1fr;
-  gap: 40px;
+  gap: 100px;
   align-items: start;
   width: 100%;
   margin-top: 40px;
@@ -445,6 +445,8 @@
 
 .content-column {
   width: 100%;
+  position: relative;
+  z-index: 5;
 }
 
 .certificate-inventory-grid {
