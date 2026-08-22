@@ -31,6 +31,17 @@ const certificationSchema = new mongoose.Schema(
       type: [String],
       default: [],
     },
+    certificationImage: {
+      fileId: {
+        type: mongoose.Schema.Types.ObjectId,
+      },
+      contentType: {
+        type: String,
+      },
+      filename: {
+        type: String,
+      },
+    },
   },
   {
     timestamps: true,

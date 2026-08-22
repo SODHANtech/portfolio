@@ -232,6 +232,49 @@ app.get("/api/profile/image", async (req, res) => {
   }
 });
 
+// GET certification image read stream by Certification ID
+app.get("/api/certifications/image/:id", async (req, res) => {
+  const { id } = req.params;
+  
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ message: "Invalid certification ID format." });
+  }
+
+  try {
+    const cert = await Certification.findById(id);
+    if (!cert) {
+      return res.status(404).json({ message: "Certification not found." });
+    }
+
+    if (!cert.certificationImage || !cert.certificationImage.fileId) {
+      return res.status(404).json({ message: "Certification image metadata missing." });
+    }
+
+    if (!mongoose.connection.db) {
+      return res.status(500).json({ message: "Database connection not ready." });
+    }
+
+    const bucket = new mongoose.mongo.GridFSBucket(mongoose.connection.db, {
+      bucketName: "certifications",
+    });
+
+    res.set("Content-Type", cert.certificationImage.contentType);
+    const downloadStream = bucket.openDownloadStream(
+      new mongoose.Types.ObjectId(cert.certificationImage.fileId)
+    );
+
+    downloadStream.on("error", (err) => {
+      console.error("[CERT_IMAGE_ROUTE]: Stream download error:", err.message);
+      res.status(404).json({ message: "Image stream failed." });
+    });
+
+    downloadStream.pipe(res);
+  } catch (error) {
+    console.error("[CERT_IMAGE_ROUTE]: Error in image download route:", error.message);
+    res.status(500).json({ message: "Failed to download image." });
+  }
+});
+
 // POST profile image upload (Admin protected)
 app.post("/api/profile/image", requireAdmin, upload.single("image"), async (req, res) => {
   try {

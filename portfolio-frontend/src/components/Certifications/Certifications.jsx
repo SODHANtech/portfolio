@@ -41,6 +41,17 @@ export default function Certifications() {
   const [certs, setCerts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [selectedCert, setSelectedCert] = useState(null);
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") {
+        setSelectedCert(null);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
 
   const loadCerts = () => {
     api
@@ -163,10 +174,58 @@ export default function Certifications() {
                         Access Decryption Key <ExternalLinkIcon />
                       </a>
                     )}
+
+                    {cert.certificationImage?.fileId && (
+                      <button
+                        onClick={() => setSelectedCert(cert)}
+                        className="cert-vault-button"
+                        style={{ marginTop: "10px", width: "100%", cursor: "pointer" }}
+                      >
+                        OPEN CERTIFICATE
+                      </button>
+                    )}
                   </div>
                 </div>
               </motion.article>
             ))}
+          </div>
+        )}
+
+        {selectedCert && (
+          <div
+            className="cert-modal-overlay"
+            onClick={() => setSelectedCert(null)}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="cert-modal-title"
+          >
+            <div className="cert-modal-content" onClick={(e) => e.stopPropagation()}>
+              <div className="cert-modal-header">
+                <span className="hud-panel-title" id="cert-modal-title">CERTIFICATE_INSPECTOR</span>
+                <div className="hud-status-wrapper">
+                  <span className="hud-status-led active" />
+                  <span>IMAGE_STREAM: ONLINE</span>
+                </div>
+                <button
+                  className="cert-close-btn"
+                  onClick={() => setSelectedCert(null)}
+                  aria-label="Close modal"
+                >
+                  ✕
+                </button>
+              </div>
+              <div className="cert-modal-body">
+                <img
+                  src={`${api.defaults.baseURL}/certifications/image/${selectedCert._id}`}
+                  alt={selectedCert.name}
+                  className="cert-inspector-image"
+                />
+                <div className="cert-modal-footer">
+                  <h4>{selectedCert.name}</h4>
+                  <p>ISSUED BY: {selectedCert.issuer}</p>
+                </div>
+              </div>
+            </div>
           </div>
         )}
       </div>
