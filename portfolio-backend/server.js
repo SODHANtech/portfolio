@@ -549,7 +549,7 @@ app.post("/api/contact", contactLimiter, async (req, res) => {
 });
 
 // All API routes are defined above, so any other request should serve the React frontend app
-app.get("*", (req, res) => {
+app.get(/.*/, (req, res) => {
   if (req.originalUrl.startsWith("/api/")) {
     return res.status(404).json({ message: "API endpoint not found" });
   }
