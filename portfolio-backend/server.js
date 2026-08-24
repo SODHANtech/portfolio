@@ -78,11 +78,10 @@ const requireAdmin = (req, res, next) => {
   next();
 };
 
-app.get("/", (req, res) => {
-  res.json({
-    message: "Portfolio API is running",
-  });
-});
+const path = require("path");
+
+// Serve static files from the React frontend app
+app.use(express.static(path.join(__dirname, "../portfolio-frontend/dist")));
 
 app.get("/api/projects", async (req, res) => {
   try {
@@ -547,6 +546,14 @@ app.post("/api/contact", contactLimiter, async (req, res) => {
       error: process.env.NODE_ENV === "production" ? undefined : error.message,
     });
   }
+});
+
+// All API routes are defined above, so any other request should serve the React frontend app
+app.get("*", (req, res) => {
+  if (req.originalUrl.startsWith("/api/")) {
+    return res.status(404).json({ message: "API endpoint not found" });
+  }
+  res.sendFile(path.resolve(__dirname, "../portfolio-frontend", "dist", "index.html"));
 });
 
 app.use((err, req, res, next) => {

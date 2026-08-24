@@ -1,0 +1,12 @@
+{
+  "name": "portfolio-monorepo",
+  "version": "1.0.0",
+  "description": "Unified build script for full-stack portfolio",
+  "scripts": {
+    "install-backend": "cd portfolio-backend && npm install",
+    "install-frontend": "cd portfolio-frontend && npm install",
+    "build-frontend": "cd portfolio-frontend && npm run build",
+    "build": "npm run install-backend && npm run install-frontend && npm run build-frontend",
+    "start": "cd portfolio-backend && node server.js"
+  }
+}

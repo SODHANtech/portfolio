@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://portfolio-8n8t.onrender.com/api",
+  baseURL: "/api",
 });
 
 export default api;
